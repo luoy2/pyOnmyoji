@@ -4,8 +4,8 @@ from utilities import *
 from img.party_img import *
 from img.utilities_img import *
 import img
-from findimg.core import findimg, wait_for_state, wait_for_leaving_state
-
+from findimg import *
+import random
 
 def waiting_for_refreshing():
     while pyautogui.pixelMatchesColor(1030, 543, (255, 255, 255)):
@@ -19,7 +19,7 @@ def enter_yaoqi_party(loc):
     click((enter_x, enter_y), tired_check=False)
     # wait_for_leaving_state(REFRESH_WAITING)
     random_sleep()
-    time.sleep(2)
+    time.sleep(1+random.random())
     if findimg(NOT_ENOUGH_SUSHI):
         escape()
         exit(0)
@@ -48,7 +48,3 @@ def find_monster(target_monster, refresh_location):
 
 
 
-#
-# target_monster = img.ss_img.RIHEFANG
-# count = 12
-# main_yaoqi(12, img.ss_img.RIHEFANG)

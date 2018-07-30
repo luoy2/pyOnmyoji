@@ -1,9 +1,10 @@
-import parties
-import time
+
 from controller import click
 from combat import Combat, CombatResult
-from findimg.core import findimg, wait_for_state, click_to_leaving_state
+from findimg import wait_for_state, click_to_leaving_state, findimg
 import img
+import parties
+import time
 
 
 def main_yaoqi(times, target_monster):
@@ -24,3 +25,9 @@ def main_yaoqi(times, target_monster):
 
         count += 1
 
+# findimg(img.party_img.YAOQIFENGYIN)
+
+if __name__ == '__main__':
+    target_monster = img.ss_img.RIHEFANG
+    count = 30
+    main_yaoqi(12, img.ss_img.RIHEFANG)

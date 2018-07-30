@@ -3,11 +3,7 @@ from controller import click
 import logging
 import img
 import enum
-logging.basicConfig(
-    filename='log/system.log',
-    level=15,
-    format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
-    datefmt="%Y-%m-%d %H:%M:%S")
+
 
 
 class CombatResult(enum.Enum):

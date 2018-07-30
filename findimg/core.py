@@ -1,21 +1,20 @@
 import pyautogui
 import time
 import datetime
-from utilities import get_window_info
+import constants
 from controller import click
 import logging
 
-WINDOW_OFFSET = get_window_info()
+
 
 
 def findimg(img):
-    global WINDOW_OFFSET
     img_path, img_region = img
     img_region = list(img_region)
-    img_region[0] += WINDOW_OFFSET[0]
-    img_region[2] += WINDOW_OFFSET[0]
-    img_region[1] += WINDOW_OFFSET[1]
-    img_region[3] += WINDOW_OFFSET[1]
+    img_region[0] += constants.WINDOW_OFFSET[0]
+    img_region[2] += constants.WINDOW_OFFSET[0]
+    img_region[1] += constants.WINDOW_OFFSET[1]
+    img_region[3] += constants.WINDOW_OFFSET[1]
     location = pyautogui.locateCenterOnScreen(img_path,
                                               grayscale=True,
                                               region=img_region)
@@ -58,6 +57,6 @@ def wait_for_state(img, max_time=15):
         time.sleep(0.1)
         location = findimg(img)
         if (datetime.datetime.now() - cur_time).seconds > max_time:
-            logging.info(f'time out finding img {img[0}} at region {img[1]}.')
+            logging.info(f'time out finding img {img[0]} at region {img[1]}.')
             break
     return location

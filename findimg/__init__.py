@@ -1,1 +1,1 @@
-import findimg.core
+from findimg.core import *
