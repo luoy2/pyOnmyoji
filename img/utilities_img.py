@@ -1,0 +1,1 @@
+NOT_ENOUGH_SUSHI = ['res/not_enough_sushi.png', (820, 450, 1030, 600)]
