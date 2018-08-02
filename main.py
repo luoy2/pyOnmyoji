@@ -20,8 +20,7 @@ logging.basicConfig(
 
 
 
-def resolution():  # 获取屏幕分辨率
-    return win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)
+
 
 
 #

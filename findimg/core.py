@@ -6,7 +6,8 @@ from controller import click
 import logging
 
 
-
+class ImgNotFound(Exception):
+    pass
 
 def findimg(img):
     img_path, img_region = img
@@ -32,7 +33,8 @@ def wait_for_leaving_state(img, max_time=5):
         location = findimg(img)
         if (datetime.datetime.now() - cur_time).seconds > max_time:
             logging.info(f'time out leaving state {img}.')
-            break
+            raise ImgNotFound()
+            # break
 
 
 def click_to_leaving_state(img, retry_time=10, location=None, rand_offset=10):
@@ -46,7 +48,8 @@ def click_to_leaving_state(img, retry_time=10, location=None, rand_offset=10):
         location = findimg(img)
         if count > retry_time:
             logging.info(f'failed to leave state {img} for {retry_time}.')
-            break
+            raise ImgNotFound()
+            # break
 
 
 def wait_for_state(img, max_time=15):
@@ -58,5 +61,7 @@ def wait_for_state(img, max_time=15):
         location = findimg(img)
         if (datetime.datetime.now() - cur_time).seconds > max_time:
             logging.info(f'time out finding img {img[0]} at region {img[1]}.')
-            break
+            raise ImgNotFound()
+            # break
     return location
+

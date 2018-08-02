@@ -1,6 +1,7 @@
 import time
 import random
 import win32gui
+import win32api
 
 def random_sleep():
     time.sleep(1+random.uniform(0,1))
@@ -15,3 +16,6 @@ def get_window_info():  # 获取阴阳师窗口信息
         return None
     else:
         return win32gui.GetWindowRect(handle)
+
+def resolution():  # 获取屏幕分辨率
+    return win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)
