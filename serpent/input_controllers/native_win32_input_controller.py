@@ -339,8 +339,8 @@ class NativeWin32InputController(InputController):
                 game_frame.frame,
                 fuzziness=fuzziness,
                 ocr_preset=ocr_preset,
-                offset_x=game_frame.offset_x,
-                offset_y=game_frame.offset_y
+                offset_x=game_frame[0],
+                offset_y=game_frame[1]
             )
 
             if string_location is not None:

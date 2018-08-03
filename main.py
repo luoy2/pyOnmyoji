@@ -28,3 +28,4 @@ def resolution():  # 获取屏幕分辨率
 target_monster = img.ss_img.HAIFANGZHU
 count = 4
 main_yaoqi(count, target_monster)
+

@@ -8,7 +8,7 @@ import logging
 
 
 
-def findimg(img):
+def findimg(img, confidence=0.8):
     img_path, img_region = img
     img_region = list(img_region)
     img_region[0] += constants.WINDOW_OFFSET[0]
@@ -22,6 +22,23 @@ def findimg(img):
         return location
     else:
         return None
+
+def findimg_all(img, confidence=0.5):
+    img_path, img_region = img
+    logging.debug(f'find all {img_path} in {img_region}')
+    img_region = list(img_region)
+    img_region[0] += constants.WINDOW_OFFSET[0]
+    img_region[2] += constants.WINDOW_OFFSET[0]
+    img_region[1] += constants.WINDOW_OFFSET[1]
+    img_region[3] += constants.WINDOW_OFFSET[1]
+    locations = pyautogui.locateAllOnScreen(img_path,
+                                              grayscale=True,
+                                              region=img_region)
+    if locations:
+        return locations
+    else:
+        return None
+
 
 
 def wait_for_leaving_state(img, max_time=5):
