@@ -7,8 +7,13 @@ import logging
 
 
 
+#TODO
+# 1. 找色器
+# 2. 多点找色
 
-def findimg(img, confidence=0.8):
+
+
+def findimg(img, confidence=0.9, grayscale=False):
     img_path, img_region = img
     img_region = list(img_region)
     img_region[0] += constants.WINDOW_OFFSET[0]
@@ -16,14 +21,15 @@ def findimg(img, confidence=0.8):
     img_region[1] += constants.WINDOW_OFFSET[1]
     img_region[3] += constants.WINDOW_OFFSET[1]
     location = pyautogui.locateCenterOnScreen(img_path,
-                                              grayscale=True,
-                                              region=img_region)
+                                              grayscale=grayscale,
+                                              region=img_region,
+                                              confidence=confidence)
     if location:
         return location
     else:
         return None
 
-def findimg_all(img, confidence=0.5):
+def findimg_all(img):
     img_path, img_region = img
     logging.debug(f'find all {img_path} in {img_region}')
     img_region = list(img_region)
