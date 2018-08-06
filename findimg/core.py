@@ -13,7 +13,7 @@ import logging
 
 
 
-def findimg(img, confidence=0.9, grayscale=False):
+def findimg(img, confidence=0.98, grayscale=False):
     img_path, img_region = img
     img_region = list(img_region)
     img_region[0] += constants.WINDOW_OFFSET[0]
@@ -69,6 +69,18 @@ def click_to_leaving_state(img, retry_time=10, location=None, rand_offset=10):
         location = findimg(img)
         if count > retry_time:
             logging.info(f'failed to leave state {img} for {retry_time}.')
+            break
+
+def click_to_get_state(img, location, retry_time=10, rand_offset=10, grayscale=True):
+    count = 0
+    img_loc = findimg(img, grayscale=grayscale)
+    while not img_loc:
+        time.sleep(0.2)
+        click(location, rand_offset, tired_check=False)
+        count += 1
+        img_loc = findimg(img)
+        if count > retry_time:
+            logging.info(f'failed to get state {img} for {retry_time}.')
             break
 
 

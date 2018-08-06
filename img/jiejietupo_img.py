@@ -2,7 +2,7 @@ import enum
 PARTY_CONTAINER_CORDS = (150, 150, 550, 1000)
 
 MAIN_TUPO = ['res/jiejietupo/main.png', (0, 0, 1700, 200)]
-ATTACK = ['res/jiejietupo/attack.png', (633, 134, 1600, 987)]
+ATTACK = ['res/jiejietupo/attack.png', (124, 54, 1586, 987)]
 
 
 

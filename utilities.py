@@ -2,8 +2,8 @@ import time
 import random
 import win32gui
 
-def random_sleep():
-    time.sleep(1+random.uniform(0,1))
+def random_sleep(base=1, multiplier=1):
+    time.sleep(base+random.uniform(0,multiplier))
 
 
 def get_window_info():  # 获取阴阳师窗口信息
@@ -15,3 +15,11 @@ def get_window_info():  # 获取阴阳师窗口信息
         return None
     else:
         return win32gui.GetWindowRect(handle)
+
+def add_pos_with_offset(pos, offset):
+    result_list = [0, 0, 0, 0]
+    result_list[0] = pos[0] + offset[0]
+    result_list[1] = pos[1] + offset[1]
+    result_list[2] = pos[2] + offset[0]
+    result_list[3] = pos[3] + offset[1]
+    return tuple(result_list)
