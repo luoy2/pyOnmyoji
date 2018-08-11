@@ -12,24 +12,11 @@ import combat
 import random
 import pyautogui
 
-user32 = windll.user32
-user32.SetProcessDPIAware()
 
-import os
-from multiprocessing import Process
-constants.init_constants()
-logging.basicConfig(
-    level=0,
-    format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
-    datefmt="%Y-%m-%d %H:%M:%S")
 
-# time.sleep(2)
-#
-
-# constants.INPUT_CONTROLLER.click_string('6', game_frame=constants.WINDOW_OFFSET)
-import enum
 class EnterJiejieDashboardFailed(Exception):
     pass
+
 
 class MainJiejie:
     color = (248, 243, 224)
@@ -136,16 +123,20 @@ class LiaoTuPo:
     def __init__(self):
         self.logger = logging.getLogger('Liao Tupo Dashboard')
         self.targets_cords = LiaoTupoTargetsCords()
+        self.current_page = 0
+        self.avaliable_target_page = 0
 
     def enter_liaotupo(self):
         wait_for_state(img.jiejietupo_img.MAIN_TUPO)
 
 
     def next_page(self):
-        pyautogui.moveTo(1097, 512)
-        constants.INPUT_CONTROLLER.scroll()
-        constants.INPUT_CONTROLLER.scroll()
-        utilities.random_sleep()
+        for i in range(4):
+            pyautogui.moveTo(1097, 512)
+            constants.INPUT_CONTROLLER.scroll()
+            time.sleep(0.3)
+            constants.INPUT_CONTROLLER.scroll()
+            time.sleep(0.3)
 
 
     def get_remain_chance(self):
@@ -161,6 +152,10 @@ class LiaoTuPo:
 
 
     def get_next_avaliable_target(self):
+        self.logger.info(f'move to page {self.avaliable_target_page}')
+        for i in range(self.avaliable_target_page-self.current_page):
+            self.next_page()
+            self.current_page+=1
         single_target = None
         for i in self.targets_cords:
             single_target = SingleTarget(i)
@@ -168,19 +163,17 @@ class LiaoTuPo:
                 break
         if not single_target.avaliable:
             self.logger.info('cannot find avaliable target in this page!')
-            for i in range(random.randint(1, 3)):
-                self.next_page()
-                time.sleep(0.5)
+            self.avaliable_target_page += 1
             return self.get_next_avaliable_target()
         return single_target
 
 
 class PersonalTuPo:
-    waiting_color = (176, 169, 161)
-    waiting_color_cords = (1402 + constants.WINDOW_OFFSET[0], 771 + constants.WINDOW_OFFSET[1])
-
 
     def __init__(self, desc=True):
+        import constants
+        self.waiting_color = (176, 169, 161)
+        self.waiting_color_cords = (1402 + constants.WINDOW_OFFSET[0], 771 + constants.WINDOW_OFFSET[1])
         self.logger = logging.getLogger(u'个人突破main')
         self.targets_cords = PersonalTupoTargetsCords()
         self.desc=desc
@@ -325,11 +318,12 @@ def main_liaotupo():
         next_target = liao_tupo.get_next_avaliable_target()
         click((int((next_target.region[2] + next_target.region[0])/2),
                int((next_target.region[3] + next_target.region[1])/2)))
-        attack_cords = wait_for_state(img.jiejietupo_img.ATTACK)
+        attack_cords = wait_for_state(img.jiejietupo_img.ATTACK, confidence=0.9)
         click(attack_cords)
-        this_fight = combat.Combat('阴阳寮突破', combat_time_limit=60*5)
+        this_fight = combat.Combat('阴阳寮突破', combat_time_limit=60*5+random.randint(40, 80))
         combat_result = this_fight.start(auto_ready=True)
         tupo_main.tap_to_main()
+        liao_tupo.current_page = 0
         logging.debug('finished one tupo')
         remain = liao_tupo.get_remain_chance()
 
@@ -353,9 +347,9 @@ def main_personaltupo(refresh_time=3, desc=True):
             logging.debug(f'this target have {next_target.metals} metal.')
             click((int((next_target.region[2] + next_target.region[0])/2),
                    int((next_target.region[3] + next_target.region[1])/2)))
-            attack_cords = wait_for_state(img.jiejietupo_img.ATTACK)
+            attack_cords = wait_for_state(img.jiejietupo_img.ATTACK, confidence=0.9)
             click(attack_cords)
-            this_fight = combat.Combat('结界突破', combat_time_limit=60*20)
+            this_fight = combat.Combat('结界突破', combat_time_limit=60*5+random.randint(40, 80))
             combat_result = this_fight.start(auto_ready=True)
             logging.debug('finished one tupo')
             tupo_main.tap_to_main()
@@ -365,8 +359,26 @@ def main_personaltupo(refresh_time=3, desc=True):
             wait_for_state(img.jiejietupo_img.MAIN_TUPO)
 
 
+def main_all_tupo(refrehs_time=3, desc=True):
+    main_liaotupo()
+    click((1648, 333))
+    main_personaltupo(refrehs_time, desc)
+    click((1648,505))
+    main_liaotupo()
 
 
+
+
+if __name__ == '__main__':
+    user32 = windll.user32
+    user32.SetProcessDPIAware()
+
+    constants.init_constants()
+    logging.basicConfig(
+        level=0,
+        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+        datefmt="%Y-%m-%d %H:%M:%S")
+    main_all_tupo(3, True)
 
 
 

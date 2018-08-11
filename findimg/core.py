@@ -1,4 +1,7 @@
 import pyautogui
+from grabscreen import grab_screen
+from PIL import Image, ImageEnhance
+from colors.util import *
 import time
 import datetime
 import constants
@@ -10,10 +13,53 @@ import logging
 #TODO
 # 1. 找色器
 # 2. 多点找色
+def match_color(img, x, y, expectedRGBColor, tolerance=0):
+    pix = img.getpixel((x, y))
+    if len(pix) == 3 or len(expectedRGBColor) == 3:  # RGB mode
+        r, g, b = pix[:3]
+        exR, exG, exB = expectedRGBColor[:3]
+        return (abs(r - exR) <= tolerance) and (abs(g - exG) <= tolerance) and (abs(b - exB) <= tolerance)
+    elif len(pix) == 4 and len(expectedRGBColor) == 4:  # RGBA mode
+        r, g, b, a = pix
+        exR, exG, exB, exA = expectedRGBColor
+        return (abs(r - exR) <= tolerance) and (abs(g - exG) <= tolerance) and (abs(b - exB) <= tolerance) and (
+                    abs(a - exA) <= tolerance)
+    else:
+        assert False, 'Color mode was expected to be length 3 (RGB) or 4 (RGBA), but pixel is length %s and expectedRGBColor is length %s' % (
+        len(pix), len(expectedRGBColor))
+
+
+
+def find_color(color):
+    region = color.region
+    region_img = Image.fromarray(grab_screen(region=region), mode='RGB')
+    # region_img.show()
+    img_size = region_img.size
+    for x in range(img_size[0]-1):
+        for y in range(img_size[1]-1):
+            this_match = True
+            for single_color in color.color_list:
+                try:
+                    if not match_color(region_img, x+single_color[0][0], y+single_color[0][1], single_color[1], color.tolerance):
+                        this_match = False
+                        break
+                except IndexError:
+                    pass
+            if this_match:
+                return (region[0]+x, region[1]+y)
+    return None
+
+
+
+def accept_invite():
+    invite_cords = find_color(UtilColor.AcceptInvite)
+    if invite_cords:
+        click(invite_cords, 5, tired_check=True)
 
 
 
 def findimg(img, confidence=0.98, grayscale=False):
+    accept_invite()
     img_path, img_region = img
     img_region = list(img_region)
     img_region[0] += constants.WINDOW_OFFSET[0]
@@ -84,13 +130,13 @@ def click_to_get_state(img, location, retry_time=10, rand_offset=10, grayscale=T
             break
 
 
-def wait_for_state(img, max_time=15):
+def wait_for_state(img, max_time=15, confidence=0.98, grayscale=False):
     logging.info(f'trying to find img {img[0]} at region {img[1]}')
     location = findimg(img)
     cur_time = datetime.datetime.now()
     while not location:
         time.sleep(0.1)
-        location = findimg(img)
+        location = findimg(img, confidence, grayscale)
         if (datetime.datetime.now() - cur_time).seconds > max_time:
             logging.info(f'time out finding img {img[0]} at region {img[1]}.')
             break
