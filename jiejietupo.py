@@ -360,11 +360,15 @@ def main_personaltupo(refresh_time=3, desc=True):
 
 
 def main_all_tupo(refrehs_time=3, desc=True):
+    accept_invite()
     main_liaotupo()
     click((1648, 333))
     main_personaltupo(refrehs_time, desc)
     click((1648,505))
     main_liaotupo()
+    while 1:
+        time.sleep(10*60)
+        main_liaotupo()
 
 
 

@@ -38,7 +38,7 @@ class Combat:
         lose_loc = findimg(img.combat_img.LOSE)
         cur_time = datetime.datetime.now()
         while not win_loc and not lose_loc:
-            time.sleep(1)
+            time.sleep(0.5)
             win_loc = findimg(img.combat_img.WIN)
             lose_loc = findimg(img.combat_img.LOSE)
             # self.logger.debug(f'win_loc: {win_loc}; lose_loc: {lose_loc}')
