@@ -10,15 +10,15 @@ WINDOW_OFFSET = None
 INPUT_CONTROLLER = None
 
 
-def init_constants():
+def init_constants(game_title=u'阴阳师-网易游戏', move_window=False):
     global TIRED_SCALE
     global TIRED_LIMIT
     global WINDOW_OFFSET
     global INPUT_CONTROLLER
-    config = {'executable_path': 'F:\Onmyoji\Launch.exe', 'window_name': u'阴阳师-网易游戏'}
-    onmyoji_game = Game(executable_path=config['executable_path'], window_name=config['window_name'])
+    config = {'window_name': game_title}
+    onmyoji_game = Game(window_name=config['window_name'], move_window=move_window)
     onmyoji_game.after_launch()
     INPUT_CONTROLLER = InputController(backend=InputControllers.NATIVE_WIN32, game=onmyoji_game)
     TIRED_SCALE = 1
     TIRED_LIMIT = random.random()*100
-    WINDOW_OFFSET = get_window_info()
+    WINDOW_OFFSET = get_window_info(game_title)

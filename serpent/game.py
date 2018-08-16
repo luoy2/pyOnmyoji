@@ -7,6 +7,7 @@ class Game:
         self.kwargs = kwargs
         self.window_name = kwargs.get("window_name")
         self.is_launched = True
+        self.if_move_window = kwargs.get('move_window')
         self.window_controller = WindowController()
         self.game_launcher = ExecutableGameLauncher(**kwargs)
 
@@ -30,8 +31,8 @@ class Game:
         time.sleep(3)
 
         self.window_id = self.window_controller.locate_window(self.window_name)
-
-        self.window_controller.move_window(self.window_id, 0, 0)
+        if self.if_move_window:
+            self.window_controller.move_window(self.window_id, 0, 0)
         self.window_controller.focus_window(self.window_id)
 
         self.window_geometry = self.extract_window_geometry()

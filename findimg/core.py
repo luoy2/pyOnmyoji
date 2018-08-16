@@ -49,7 +49,9 @@ def find_color(color):
                 return (region[0]+x, region[1]+y)
     return None
 
-
+def myFindColor(color):
+    accept_invite()
+    return find_color(color)
 
 def accept_invite():
     invite_cords = find_color(UtilColor.AcceptInvite)
