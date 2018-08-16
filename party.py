@@ -1,11 +1,12 @@
-
+import constants
 from controller import click
 from combat import Combat, CombatResult
-from findimg import wait_for_state, click_to_leaving_state, findimg
+from findimg import *
+from colors.util import PartyColor
 import img
 import parties
 import time
-
+import utilities
 
 def main_yaoqi(times, target_monster):
     count = 0
@@ -25,23 +26,52 @@ def main_yaoqi(times, target_monster):
 
         count += 1
 
-# findimg(img.party_img.YAOQIFENGYIN)
+def as_member(batter_name):
+    while 1:
+        battle = Combat(batter_name)
+        battle.start(auto_ready=True)
+        time.sleep(2)
+
+def as_leader(batter_name):
+    while 1:
+        battle = Combat(batter_name)
+        battle.start(auto_ready=True)
+        time.sleep(2)
+        start_loc = wait_for_color(PartyColor.StartFight)
+        utilities.random_sleep(0.5, 2)
+        click(start_loc, random_range=3, tired_check=True)
 
 if __name__ == '__main__':
     import constants
     import combat
     import logging
     from ctypes import windll
-
     user32 = windll.user32
     user32.SetProcessDPIAware()
 
-    constants.init_constants(u'[#] 阴阳师-网易游戏 [#]')
     logging.basicConfig(
         level=0,
         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
         datefmt="%Y-%m-%d %H:%M:%S")
-    while 1:
-        battle = combat.Combat('觉醒')
-        battle.start(auto_ready=True)
-        time.sleep(2)
+
+    constants.init_constants(u'阴阳师-网易游戏', move_window=True)
+    as_leader('御魂')
+
+    # constants.init_constants(u'[#] 阴阳师-网易游戏 [#]', move_window=False)
+    # as_member('御魂')
+
+
+# if __name__ == '__main__':
+#     import constants
+#     import combat
+#     import logging
+#     from ctypes import windll
+#
+#     user32 = windll.user32
+#     user32.SetProcessDPIAware()
+#
+#     constants.init_constants(u'[#] 阴阳师-网易游戏 [#]')
+#     logging.basicConfig(
+#         level=0,
+#         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+#         datefmt="%Y-%m-%d %H:%M:%S")

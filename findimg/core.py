@@ -143,3 +143,16 @@ def wait_for_state(img, max_time=15, confidence=0.98, grayscale=False):
             logging.info(f'time out finding img {img[0]} at region {img[1]}.')
             break
     return location
+
+
+def wait_for_color(color, max_time=15):
+    logging.info(f'trying to find color table {color}')
+    location = myFindColor(color)
+    cur_time = datetime.datetime.now()
+    while not location:
+        time.sleep(0.1)
+        location = myFindColor(color)
+        if (datetime.datetime.now() - cur_time).seconds > max_time:
+            logging.info(f'time out finding color table {color}.')
+            break
+    return location

@@ -12,7 +12,8 @@ import combat
 import random
 import pyautogui
 
-
+class LiaotupoFinishedException(Exception):
+    pass
 
 class EnterJiejieDashboardFailed(Exception):
     pass
@@ -161,6 +162,9 @@ class LiaoTuPo:
             single_target = SingleTarget(i)
             if single_target.avaliable:
                 break
+        if single_target.finished:
+            self.logger.info('所有结界都已经被突破！')
+            raise LiaotupoFinishedException()
         if not single_target.avaliable:
             self.logger.info('cannot find avaliable target in this page!')
             self.avaliable_target_page += 1
@@ -315,17 +319,20 @@ def main_liaotupo():
     remain = liao_tupo.get_remain_chance()
 
     while remain:
-        next_target = liao_tupo.get_next_avaliable_target()
-        click((int((next_target.region[2] + next_target.region[0])/2),
-               int((next_target.region[3] + next_target.region[1])/2)))
-        attack_cords = wait_for_state(img.jiejietupo_img.ATTACK, confidence=0.9)
-        click(attack_cords)
-        this_fight = combat.Combat('阴阳寮突破', combat_time_limit=60*5+random.randint(40, 80))
-        combat_result = this_fight.start(auto_ready=True)
-        tupo_main.tap_to_main()
-        liao_tupo.current_page = 0
-        logging.debug('finished one tupo')
-        remain = liao_tupo.get_remain_chance()
+        try:
+            next_target = liao_tupo.get_next_avaliable_target()
+            click((int((next_target.region[2] + next_target.region[0])/2),
+                   int((next_target.region[3] + next_target.region[1])/2)))
+            attack_cords = wait_for_state(img.jiejietupo_img.ATTACK, confidence=0.9)
+            click(attack_cords)
+            this_fight = combat.Combat('阴阳寮突破', combat_time_limit=60*5+random.randint(40, 80))
+            combat_result = this_fight.start(auto_ready=True)
+            tupo_main.tap_to_main()
+            liao_tupo.current_page = 0
+            logging.debug('finished one tupo')
+            remain = liao_tupo.get_remain_chance()
+        except LiaotupoFinishedException:
+            break
 
 
 def main_personaltupo(refresh_time=3, desc=True):
@@ -377,7 +384,7 @@ if __name__ == '__main__':
     user32 = windll.user32
     user32.SetProcessDPIAware()
 
-    constants.init_constants()
+    constants.init_constants(u'阴阳师-网易游戏', move_window=True)
     logging.basicConfig(
         level=0,
         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',

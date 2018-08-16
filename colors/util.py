@@ -42,3 +42,13 @@ raw_find_chaoguiwang = [[(28, 366), (227, 217, 205)],
 
 class ChaoGuiColor:
     FindChaoGui = ColorToMatch((19, 352, 116, 464), normalize_color_list(raw_find_chaoguiwang), 1)
+
+
+
+
+
+
+raw_start = [((1391, 826), (243, 178, 94)),((1383, 910), (167, 155, 145)),((1486, 851), (243, 178, 94))]
+
+class PartyColor:
+    StartFight = ColorToMatch((1277, 816, 1508, 895), normalize_color_list(raw_start), 1)
