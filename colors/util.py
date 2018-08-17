@@ -52,3 +52,9 @@ raw_start = [((1391, 826), (243, 178, 94)),((1383, 910), (167, 155, 145)),((1486
 
 class PartyColor:
     StartFight = ColorToMatch((1277, 816, 1508, 895), normalize_color_list(raw_start), 1)
+
+
+
+raw_guihuo = [((1185, 993), (255, 255, 255)),((1184, 964), (2, 110, 177)),((1188, 995), (253, 254, 255))]
+class CombatColor:
+    InCombat = ColorToMatch((1172, 955, 1200, 1010), normalize_color_list(raw_guihuo), 2)

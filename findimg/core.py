@@ -7,6 +7,7 @@ import datetime
 import constants
 from controller import click
 import logging
+import utilities
 
 
 
@@ -111,7 +112,7 @@ def click_to_leaving_state(img, retry_time=10, location=None, rand_offset=10):
         location = findimg(img)
     count = 0
     while location:
-        time.sleep(0.2)
+        utilities.random_sleep(0.2, 0.4)
         click(location, rand_offset, tired_check=False)
         count += 1
         location = findimg(img)
@@ -150,9 +151,36 @@ def wait_for_color(color, max_time=15):
     location = myFindColor(color)
     cur_time = datetime.datetime.now()
     while not location:
-        time.sleep(0.1)
+        time.sleep(0.2)
         location = myFindColor(color)
         if (datetime.datetime.now() - cur_time).seconds > max_time:
             logging.info(f'time out finding color table {color}.')
             break
     return location
+
+
+def wait_for_leaving_color(color,
+                           max_waiting_time=15,
+                           max_click_time=5,
+                           clicking=False,
+                           clicking_gap=0.2,
+                           location=None,
+                           rand_offset=3):
+    logging.info(f'trying to leave color table {color}')
+    color_location = myFindColor(color)
+    count = 0
+    cur_time = datetime.datetime.now()
+    while color_location:
+        click_location = location if location else color_location
+        time.sleep(0.2)
+        if clicking:
+            utilities.random_sleep(clicking_gap, 0.2)
+            click(click_location, rand_offset, tired_check=False)
+            count += 1
+            if count > max_click_time:
+                logging.info(f'failed to leave state {img} for {retry_time}.')
+                raise Exception
+        color_location = myFindColor(color)
+        if (datetime.datetime.now() - cur_time).seconds > max_waiting_time:
+            logging.info(f'time out finding color table {color}.')
+            raise Exception

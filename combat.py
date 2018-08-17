@@ -2,8 +2,9 @@ from findimg.core import *
 from controller import click
 import logging
 import img
+import utilities
 import enum
-
+from colors.util import CombatColor
 
 
 class CombatResult(enum.Enum):
@@ -34,24 +35,28 @@ class Combat:
         return self.get_result()
 
     def get_result(self):
+        wait_for_color(CombatColor.InCombat)
+        wait_for_leaving_color(CombatColor.InCombat, max_waiting_time=self.combat_time_limit)
         win_loc = findimg(img.combat_img.WIN)
         lose_loc = findimg(img.combat_img.LOSE)
         cur_time = datetime.datetime.now()
         while not win_loc and not lose_loc:
-            time.sleep(0.5)
+            time.sleep(0.3)
             win_loc = findimg(img.combat_img.WIN)
             lose_loc = findimg(img.combat_img.LOSE)
             # self.logger.debug(f'win_loc: {win_loc}; lose_loc: {lose_loc}')
-            if (datetime.datetime.now() - cur_time).seconds > self.combat_time_limit:
+            if (datetime.datetime.now() - cur_time).seconds > 10:
                 self.logger.debug('time out ending combat.')
-                break
+                raise TimeoutError
         if win_loc:
             click_to_leaving_state(img.combat_img.WIN, rand_offset=50, location=win_loc)
             result_loc = wait_for_state(img.combat_img.RESULT2, 100)
-            click_to_leaving_state(img.combat_img.RESULT2, rand_offset=50, location=result_loc)
+            click_to_leaving_state(img.combat_img.RESULT2, rand_offset=100, location=result_loc)
+            utilities.random_sleep(1, 2)
             return CombatResult.WIN
         elif lose_loc:
             click_to_leaving_state(img.combat_img.LOSE, rand_offset=50, location=lose_loc)
+            utilities.random_sleep(1, 2)
             return CombatResult.LOSE
         else:
             self.exist()
