@@ -135,9 +135,9 @@ class LiaoTuPo:
         for i in range(4):
             pyautogui.moveTo(1097, 512)
             constants.INPUT_CONTROLLER.scroll()
-            time.sleep(0.3)
+            time.sleep(0.2)
             constants.INPUT_CONTROLLER.scroll()
-            time.sleep(0.3)
+            time.sleep(0.2)
 
 
     def get_remain_chance(self):

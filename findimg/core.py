@@ -32,22 +32,25 @@ def match_color(img, x, y, expectedRGBColor, tolerance=0):
 
 
 def find_color(color):
-    region = color.region
-    region_img = Image.fromarray(grab_screen(region=region), mode='RGB')
+    search_region = color.region
+    img_region = color.screen_shot_region
+    screen_shot_img = Image.fromarray(grab_screen(region=img_region), mode='RGB')
+    offset_x = search_region[0] - img_region[0]
+    offset_y = search_region[1] - img_region[1]
+    # region_img = Image.fromarray(grab_screen(region=region), mode='RGB')
     # region_img.show()
-    img_size = region_img.size
-    for x in range(img_size[0]-1):
-        for y in range(img_size[1]-1):
+    for x in range(search_region[2] - search_region[0] + 1):
+        for y in range(search_region[3] - search_region[1] + 1):
             this_match = True
             for single_color in color.color_list:
                 try:
-                    if not match_color(region_img, x+single_color[0][0], y+single_color[0][1], single_color[1], color.tolerance):
+                    if not match_color(screen_shot_img, x+single_color[0][0]+offset_x, y+single_color[0][1]+offset_y, single_color[1], color.tolerance):
                         this_match = False
                         break
                 except IndexError:
                     pass
             if this_match:
-                return (region[0]+x, region[1]+y)
+                return (search_region[0]+x, search_region[1])
     return None
 
 def myFindColor(color):
@@ -170,17 +173,22 @@ def wait_for_leaving_color(color,
     color_location = myFindColor(color)
     count = 0
     cur_time = datetime.datetime.now()
-    while color_location:
-        click_location = location if location else color_location
-        time.sleep(0.2)
-        if clicking:
-            utilities.random_sleep(clicking_gap, 0.2)
-            click(click_location, rand_offset, tired_check=False)
-            count += 1
-            if count > max_click_time:
-                logging.info(f'failed to leave state {img} for {retry_time}.')
+    recheck = 0
+    while recheck < 3:
+        while color_location:
+            click_location = location if location else color_location
+            time.sleep(0.2)
+            if clicking:
+                utilities.random_sleep(clicking_gap, 0.2)
+                click(click_location, rand_offset, tired_check=False)
+                count += 1
+                if count > max_click_time:
+                    logging.info(f'failed to leave state {img} for {retry_time}.')
+                    raise Exception
+            time.sleep(0.5)
+            color_location = myFindColor(color)
+            if (datetime.datetime.now() - cur_time).seconds > max_waiting_time:
+                logging.info(f'time out finding color table {color}.')
                 raise Exception
-        color_location = myFindColor(color)
-        if (datetime.datetime.now() - cur_time).seconds > max_waiting_time:
-            logging.info(f'time out finding color table {color}.')
-            raise Exception
+        recheck+=1
+    time.sleep(0.5)

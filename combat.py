@@ -36,26 +36,47 @@ class Combat:
 
     def get_result(self):
         wait_for_color(CombatColor.InCombat)
-        wait_for_leaving_color(CombatColor.InCombat, max_waiting_time=self.combat_time_limit)
-        win_loc = findimg(img.combat_img.WIN)
-        lose_loc = findimg(img.combat_img.LOSE)
+        win_loc = myFindColor(CombatColor.Win)
+        lose_loc = myFindColor(CombatColor.Lose)
         cur_time = datetime.datetime.now()
         while not win_loc and not lose_loc:
             time.sleep(0.3)
-            win_loc = findimg(img.combat_img.WIN)
-            lose_loc = findimg(img.combat_img.LOSE)
+            win_loc = myFindColor(CombatColor.Win)
+            lose_loc = myFindColor(CombatColor.Lose)
             # self.logger.debug(f'win_loc: {win_loc}; lose_loc: {lose_loc}')
-            if (datetime.datetime.now() - cur_time).seconds > 10:
+            if (datetime.datetime.now() - cur_time).seconds > self.combat_time_limit:
                 self.logger.debug('time out ending combat.')
                 raise TimeoutError
         if win_loc:
-            click_to_leaving_state(img.combat_img.WIN, rand_offset=50, location=win_loc)
-            result_loc = wait_for_state(img.combat_img.RESULT2, 100)
-            click_to_leaving_state(img.combat_img.RESULT2, rand_offset=100, location=result_loc)
+            wait_for_leaving_color(CombatColor.Win,
+                                   max_waiting_time=15,
+                                   max_click_time=5,
+                                   clicking=True,
+                                   clicking_gap=0.3,
+                                   location=(798, 337),
+                                   rand_offset=30)
+            result = None
+            while not result:
+                click((809, 416), random_range=3)
+                utilities.random_sleep(0.2, 0.5)
+                result = myFindColor(CombatColor.Damo)
+            wait_for_leaving_color(CombatColor.Damo,
+                                   max_waiting_time=15,
+                                   max_click_time=3,
+                                   clicking=True,
+                                   clicking_gap=0.5,
+                                   location=(846, 670),
+                                   rand_offset=20)
             utilities.random_sleep(1, 2)
             return CombatResult.WIN
         elif lose_loc:
-            click_to_leaving_state(img.combat_img.LOSE, rand_offset=50, location=lose_loc)
+            wait_for_leaving_color(CombatColor.Lose,
+                                   max_waiting_time=15,
+                                   max_click_time=3,
+                                   clicking=True,
+                                   clicking_gap=0.5,
+                                   location=(798, 337),
+                                   rand_offset=30)
             utilities.random_sleep(1, 2)
             return CombatResult.LOSE
         else:
@@ -75,6 +96,7 @@ class Combat:
 
 
 if __name__ == '__main__':
+
     combat = Combat('结界突破')
     combat_result = combat.start(True)
     combat.exist()
