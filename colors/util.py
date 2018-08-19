@@ -22,7 +22,7 @@ class ColorToMatch:
 
 
     def show(self):
-        region_img = Image.fromarray(grab_screen(region=self.screen_shot_region), mode='RGB')
+        region_img = Image.fromarray(grab_screen(region=self.region), mode='RGB')
         region_img.show()
 
     def get_region_to_screenshot(self):
@@ -71,6 +71,6 @@ damo = [((858, 756), (46, 26, 20)), ((827, 729), (189, 82, 42)), ((916, 746), (1
 
 class CombatColor:
     InCombat = ColorToMatch((703, 955, 1200, 1010), normalize_color_list(raw_guihuo), 1)
-    Win = ColorToMatch((610, 213, 660, 272), normalize_color_list(raw_win), 1)
-    Lose = ColorToMatch((610, 213, 660, 272), normalize_color_list(raw_lose), 1)
-    Damo = ColorToMatch((858-20, 756-20, 858+20, 756+20), normalize_color_list(damo), 1)
+    Win = ColorToMatch((610-50, 213-50-50, 660+50, 272+50), normalize_color_list(raw_win), 1)
+    Lose = ColorToMatch((610-50, 213-50-50, 660+50, 272+50), normalize_color_list(raw_lose), 1)
+    Damo = ColorToMatch((858-50, 756-50, 858+50, 756+50), normalize_color_list(damo), 1)

@@ -35,7 +35,7 @@ class Combat:
         return self.get_result()
 
     def get_result(self):
-        wait_for_color(CombatColor.InCombat)
+        # wait_for_color(CombatColor.InCombat)
         win_loc = myFindColor(CombatColor.Win)
         lose_loc = myFindColor(CombatColor.Lose)
         cur_time = datetime.datetime.now()
@@ -48,16 +48,17 @@ class Combat:
                 self.logger.debug('time out ending combat.')
                 raise TimeoutError
         if win_loc:
+            click((798, 337), random_range=30, tired_check=False)
             wait_for_leaving_color(CombatColor.Win,
                                    max_waiting_time=15,
                                    max_click_time=5,
-                                   clicking=True,
+                                   clicking=False,
                                    clicking_gap=0.3,
                                    location=(798, 337),
                                    rand_offset=30)
             result = None
             while not result:
-                click((809, 416), random_range=3)
+                click((57, 940), random_range=3)
                 utilities.random_sleep(0.2, 0.5)
                 result = myFindColor(CombatColor.Damo)
             wait_for_leaving_color(CombatColor.Damo,
@@ -65,15 +66,16 @@ class Combat:
                                    max_click_time=3,
                                    clicking=True,
                                    clicking_gap=0.5,
-                                   location=(846, 670),
+                                   location=(57, 940),
                                    rand_offset=20)
             utilities.random_sleep(1, 2)
             return CombatResult.WIN
         elif lose_loc:
+            click((798, 337), random_range=30, tired_check=False)
             wait_for_leaving_color(CombatColor.Lose,
                                    max_waiting_time=15,
                                    max_click_time=3,
-                                   clicking=True,
+                                   clicking=False,
                                    clicking_gap=0.5,
                                    location=(798, 337),
                                    rand_offset=30)
@@ -97,6 +99,15 @@ class Combat:
 
 if __name__ == '__main__':
 
-    combat = Combat('结界突破')
-    combat_result = combat.start(True)
-    combat.exist()
+    import logging
+    from ctypes import windll
+    user32 = windll.user32
+    user32.SetProcessDPIAware()
+
+    logging.basicConfig(
+        level=0,
+        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+        datefmt="%Y-%m-%d %H:%M:%S")
+    #
+    constants.init_constants(u'[#] 阴阳师-网易游戏 [#]', move_window=False)
+    self = Combat('test')

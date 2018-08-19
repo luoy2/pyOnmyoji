@@ -32,8 +32,8 @@ def match_color(img, x, y, expectedRGBColor, tolerance=0):
 
 
 def find_color(color):
-    search_region = color.region
-    img_region = color.screen_shot_region
+    search_region = utilities.add_pos_with_offset(color.region, constants.WINDOW_OFFSET)
+    img_region = utilities.add_pos_with_offset(color.screen_shot_region, constants.WINDOW_OFFSET)
     screen_shot_img = Image.fromarray(grab_screen(region=img_region), mode='RGB')
     offset_x = search_region[0] - img_region[0]
     offset_y = search_region[1] - img_region[1]
@@ -180,7 +180,7 @@ def wait_for_leaving_color(color,
             time.sleep(0.2)
             if clicking:
                 utilities.random_sleep(clicking_gap, 0.2)
-                click(click_location, rand_offset, tired_check=False)
+                click(click_location, rand_offset, tired_check=True)
                 count += 1
                 if count > max_click_time:
                     logging.info(f'failed to leave state {img} for {retry_time}.')
