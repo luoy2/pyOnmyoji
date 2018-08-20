@@ -11,42 +11,12 @@ import utilities
 import numpy as np
 
 
-
 #TODO
 # 1. 找色器
 # 2. 多点找色
 def _match_color(img, x, y, expectedRGBColor, tolerance=0):
     pix = img.getpixel((x, y))
-    if len(pix) == 3 or len(expectedRGBColor) == 3:  # RGB mode
-        r, g, b = pix[:3]
-        exR, exG, exB = expectedRGBColor[:3]
-        return (abs(r - exR) <= tolerance) and (abs(g - exG) <= tolerance) and (abs(b - exB) <= tolerance)
-    elif len(pix) == 4 and len(expectedRGBColor) == 4:  # RGBA mode
-        r, g, b, a = pix
-        exR, exG, exB, exA = expectedRGBColor
-        return (abs(r - exR) <= tolerance) and (abs(g - exG) <= tolerance) and (abs(b - exB) <= tolerance) and (
-                    abs(a - exA) <= tolerance)
-    else:
-        assert False, 'Color mode was expected to be length 3 (RGB) or 4 (RGBA), but pixel is length %s and expectedRGBColor is length %s' % (
-        len(pix), len(expectedRGBColor))
-
-
-def _match_colors(x, y, offset_x, offset_y, color, screen_shot_img, search_region):
-    this_match = True
-    for single_color in color.color_list:
-        try:
-            if not _match_color(screen_shot_img, x + single_color[0][0] + offset_x, y + single_color[0][1] + offset_y,
-                               single_color[1], color.tolerance):
-                this_match = False
-                break
-        except IndexError:
-            pass
-    if this_match:
-        return (search_region[0] + x, search_region[1] + y)
-
-
-def __match_color_from_array(img, x, y, expectedRGBColor, tolerance=0):
-    pix = img[x][y]
+    # pix = img[x][y]
     if len(pix) == 3 or len(expectedRGBColor) == 3:  # RGB mode
         r, g, b = pix[:3]
         exR, exG, exB = expectedRGBColor[:3]
@@ -62,68 +32,33 @@ def __match_color_from_array(img, x, y, expectedRGBColor, tolerance=0):
 
 
 
+
+
+from tqdm import *
+
+#
 def find_color(color):
     search_region = utilities.add_pos_with_offset(color.region, constants.WINDOW_OFFSET)
     img_region = utilities.add_pos_with_offset(color.screen_shot_region, constants.WINDOW_OFFSET)
-    screen_shot_img = grab_screen(region=img_region)
-    screen_shot_img = screen_shot_img.transpose(1, 0, 2)
+    screen_shot_img = Image.fromarray(grab_screen(region=img_region), mode='RGB')
+    # screen_shot_img = grab_screen(region=img_region).transpose(1,0,2)
     offset_x = search_region[0] - img_region[0]
     offset_y = search_region[1] - img_region[1]
-    # region_img = Image.fromarray(screen_shot_img, mode='RGB')
+    # region_img = Image.fromarray(grab_screen(region=region), mode='RGB')
     # region_img.show()
     for x in range(search_region[2] - search_region[0] + 1):
         for y in range(search_region[3] - search_region[1] + 1):
             this_match = True
             for single_color in color.color_list:
-                expectedRGBColor = single_color[1]
-                tolerance = color.tolerance
                 try:
-                    if not __match_color_from_array(screen_shot_img, x+single_color[0][0]+offset_x, y+single_color[0][1]+offset_y, expectedRGBColor, tolerance):
+                    if not _match_color(screen_shot_img, x+single_color[0][0]+offset_x, y+single_color[0][1]+offset_y, single_color[1], color.tolerance):
                         this_match = False
                         break
                 except IndexError:
                     pass
             if this_match:
-                # print((search_region[0]+x, search_region[1]+y))
                 return (search_region[0]+x, search_region[1]+y)
     return None
-
-#
-# def find_color(color):
-#     search_region = utilities.add_pos_with_offset(color.region, constants.WINDOW_OFFSET)
-#     img_region = utilities.add_pos_with_offset(color.screen_shot_region, constants.WINDOW_OFFSET)
-#     screen_shot_img = Image.fromarray(grab_screen(region=img_region), mode='RGB')
-#     offset_x = search_region[0] - img_region[0]
-#     offset_y = search_region[1] - img_region[1]
-#     # region_img = Image.fromarray(grab_screen(region=region), mode='RGB')
-#     # region_img.show()
-#     X = np.arange(search_region[2] - search_region[0] + 1)
-#     Y = np.arange(search_region[3] - search_region[1] + 1)
-#     stacked_inputs = np.vstack((X, Y))
-#     X, Y = np.mgrid[0:search_region[2] - search_region[0] + 1:1, 0:search_region[3] - search_region[1] + 1:1]
-#     array = np.array(range(search_region[2] - search_region[0] + 1))
-#     match_color = np.vectorize(lambda x, y: _match_colors(x=x,
-#                                                           y=y,
-#                                                           color=color,
-#                                                           offset_x=offset_x,
-#                                                           offset_y=offset_y,
-#                                                           screen_shot_img=screen_shot_img,
-#                                                           search_region=search_region))
-#
-#     match_color(X, Y)
-#     for x in range(search_region[2] - search_region[0] + 1):
-#         for y in range(search_region[3] - search_region[1] + 1):
-#             this_match = True
-#             for single_color in color.color_list:
-#                 try:
-#                     if not match_color(screen_shot_img, x+single_color[0][0]+offset_x, y+single_color[0][1]+offset_y, single_color[1], color.tolerance):
-#                         this_match = False
-#                         break
-#                 except IndexError:
-#                     pass
-#             if this_match:
-#                 return (search_region[0]+x, search_region[1]+y)
-#     return None
 
 def myFindColor(color):
     accept_invite()

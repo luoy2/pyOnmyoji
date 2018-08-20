@@ -141,6 +141,9 @@ def tansuo_to_dungeon():
     enter_dugeon_loc = wait_for_color(TansuoColor.EnterDungeon, max_time=5)
     if enter_dugeon_loc:
         click(enter_dugeon_loc)
+        in_dugeon = wait_for_color(TansuoColor.InDungeon)
+        if not in_dugeon:
+            return tansuo_to_dungeon()
     else:
         constants.INPUT_CONTROLLER.move(1564+random.randrange(-50, 50), 648+random.randrange(-50, 50))
         time.sleep(0.2)
@@ -171,7 +174,7 @@ def search_for_exp(fight_count):
     print('寻找经验怪, 同屏找怪5秒')
     search_t = datetime.datetime.now()
     while (datetime.datetime.now() - search_t).total_seconds() <= 5:
-        print(f'找怪第{count}次')
+        # print(f'找怪第{count}次')
         exp_loc = myFindColor(TansuoColor.ExpIcon)
         if exp_loc:
             print('找到经验怪')
@@ -202,8 +205,10 @@ def search_for_exp(fight_count):
                     fight_count = fight_count + 1
                     this_fight = combat.Combat('探索BOSS', combat_time_limit=60 * 1 + random.randint(40, 80))
                     combat_result = this_fight.start(auto_ready=False)
+                    time.sleep(2)
                     loc = wait_for_color(TansuoColor.InDungeon)
                     if loc:
+                        logging.info('loot found!')
                         loot_loc = myFindColor(TansuoColor.BossLoot)
                         while loot_loc:
                             click(loot_loc, tired_check=True)
