@@ -63,14 +63,23 @@ class PartyColor:
     StartFight = ColorToMatch((1277, 816, 1508, 895), normalize_color_list(raw_start), 1)
 
 
+
 raw_win = [((652, 261), (131, 26, 17)), ((685, 313), (152, 27, 17)), ((658, 341), (213, 199, 177)), ((612, 300),
            (145, 26, 17))]
 raw_lose = [((638, 245), (84, 78, 96)),((678, 300), (91, 82, 101)), ((644, 335), (196, 178, 151)), ((609,297), (91, 82, 101))]
 raw_guihuo = [((1185, 993), (255, 255, 255)), ((1184, 964), (2, 110, 177)), ((1188, 995), (253, 254, 255))]
 damo = [((858, 756), (46, 26, 20)), ((827, 729), (189, 82, 42)), ((916, 746), (187, 60, 26)), ((909, 799), (14, 1, 1))]
-
+raw_ready = [[(1525, 764), (255, 243, 209)], [(1569, 776), (212, 174, 119)], [(1600, 801), (255, 242, 208)], [(1658, 899), (199, 42, 19)]]
 class CombatColor:
+    Ready = ColorToMatch((1508, 741, 1568, 814), normalize_color_list(raw_ready), 2)
     InCombat = ColorToMatch((703, 955, 1200, 1010), normalize_color_list(raw_guihuo), 1)
     Win = ColorToMatch((610-50, 213-50-50, 660+50, 272+50), normalize_color_list(raw_win), 1)
     Lose = ColorToMatch((610-50, 213-50-50, 660+50, 272+50), normalize_color_list(raw_lose), 1)
     Damo = ColorToMatch((858-50, 756-50, 858+50, 756+50), normalize_color_list(damo), 1)
+
+
+
+
+
+
+

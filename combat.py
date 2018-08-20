@@ -29,7 +29,7 @@ class Combat:
 
     def start(self, auto_ready=False):
         if not auto_ready:
-            ready_loc = wait_for_state(img.combat_img.NOT_READY)
+            ready_loc = wait_for_color(CombatColor.Ready)
             click(ready_loc, random_range=10, tired_check=False)
         #TODO: AUTO DETECT READY
         return self.get_result()
@@ -58,7 +58,7 @@ class Combat:
                                    rand_offset=30)
             result = None
             while not result:
-                click((57, 940), random_range=3)
+                click((57, 940), random_range=3, tired_check=False)
                 utilities.random_sleep(0.2, 0.5)
                 result = myFindColor(CombatColor.Damo)
             wait_for_leaving_color(CombatColor.Damo,
