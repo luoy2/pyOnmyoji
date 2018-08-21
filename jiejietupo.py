@@ -190,8 +190,8 @@ class PersonalTuPo:
         while pyautogui.pixelMatchesColor(self.waiting_color_cords[0],
                                           self.waiting_color_cords[1],
                                           self.waiting_color):
-            MINUTE_CORDS = utilities.add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_MINUTE, constants.WINDOW_OFFSET)
-            SECOND_CORDS = utilities.add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_SECOND, constants.WINDOW_OFFSET)
+            MINUTE_CORDS = utilities.add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_MINUTE, constants.WINDOW_ATTRIBUTES)
+            SECOND_CORDS = utilities.add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_SECOND, constants.WINDOW_ATTRIBUTES)
             minute_img = Image.fromarray(grab_screen(MINUTE_CORDS))
             minute_str = pytesseract.image_to_string(minute_img, lang='eng', config='-psm 6').replace('O', '0')
             second_img = Image.fromarray(grab_screen(SECOND_CORDS))
@@ -214,7 +214,7 @@ class PersonalTuPo:
 
 
     def get_remain_chance(self):
-        chance_location = utilities.add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_TUPO_CHANCE_LEFT, constants.WINDOW_OFFSET)
+        chance_location = utilities.add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_TUPO_CHANCE_LEFT, constants.WINDOW_ATTRIBUTES)
         img = grab_screen(chance_location)
         img = Image.fromarray(img)
         remain = int(pytesseract.image_to_string(img, config='-psm 6').replace('O', '0'))
@@ -374,7 +374,7 @@ def main_all_tupo(refrehs_time=3, desc=True):
     click((1648,505))
     main_liaotupo()
     while 1:
-        time.sleep(10*60)
+        time.sleep((10+random.randrange(10, 20))*60)
         main_liaotupo()
 
 

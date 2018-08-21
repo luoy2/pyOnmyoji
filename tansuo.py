@@ -26,16 +26,12 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S")
 _CAPTAINSLOT = 3
 
-def cordinates_convert(cords, original_scale=(2048, 1536), current_res=get_window_info()[2:]):
-    new_x = round(cords[0] / original_scale[0] * current_res[0])
-    new_y = round(cords[1] / original_scale[1] * current_res[1])
-    return (new_x, new_y)
 
 
 def color_code_convert(color_str, original_scale=(2048, 1536), current_res=get_window_info()[2:]):
     base, offset, accuracy, x_start, y_start, x_end, y_end = color_str[1:-1].split(', ')
-    new_x0, new_y0 = cordinates_convert((float(x_start), float(y_start)))
-    new_x1, new_y1 = cordinates_convert((float(x_end), float(y_end)))
+    new_x0, new_y0 = cordinates_convert((float(x_start), float(y_start)), constants.WINDOW_ATTRIBUTES)
+    new_x1, new_y1 = cordinates_convert((float(x_end), float(y_end)), constants.WINDOW_ATTRIBUTES)
     color_list = [[(0, 0), hex2rgb(base[2:])]]
     for i in offset[1:-1].split(','):
         offset_x, offset_y, color = i.split('|')
@@ -53,9 +49,9 @@ color_code_convert(color_str)
 
 def change_ss(ss_num):
     if ss_num in (1, 2, 3):
-        click(cordinates_convert((1050, 1067)))
+        click(1050, 1067)
     else:
-        click(cordinates_convert((289, 726)))
+        click(289, 726)
 
 normalize_color_list([[(556, 521), (138, 27, 27)],
                       [(550, 500), (40, 99, 119)],

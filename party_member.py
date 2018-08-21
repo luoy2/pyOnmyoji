@@ -44,7 +44,6 @@ def as_leader(batter_name):
 
 if __name__ == '__main__':
     import constants
-    import combat
     import logging
     from ctypes import windll
     user32 = windll.user32

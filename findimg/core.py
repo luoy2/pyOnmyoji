@@ -38,8 +38,8 @@ from tqdm import *
 
 #
 def find_color(color):
-    search_region = utilities.add_pos_with_offset(color.region, constants.WINDOW_OFFSET)
-    img_region = utilities.add_pos_with_offset(color.screen_shot_region, constants.WINDOW_OFFSET)
+    search_region = utilities.add_pos_with_offset(color.region, constants.WINDOW_ATTRIBUTES)
+    img_region = utilities.add_pos_with_offset(color.screen_shot_region, constants.WINDOW_ATTRIBUTES)
     screen_shot_img = Image.fromarray(grab_screen(region=img_region), mode='RGB')
     # screen_shot_img = grab_screen(region=img_region).transpose(1,0,2)
     offset_x = search_region[0] - img_region[0]

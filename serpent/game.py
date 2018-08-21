@@ -38,7 +38,7 @@ class Game:
         self.window_geometry = self.extract_window_geometry()
 
         print(self.window_geometry)
-
+        return self.window_geometry
 
     def extract_window_geometry(self):
         if self.is_launched:

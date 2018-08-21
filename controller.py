@@ -4,15 +4,14 @@ import pyautogui
 import logging
 import constants
 import time
+from utilities import *
 
 
 
 def click(cords, random_range=5,tired_check=True):
     if tired_check:
         perform_tired_check()
-    x, y=cords
-    x = x + constants.WINDOW_OFFSET[0]
-    y = y + constants.WINDOW_OFFSET[1]
+    x, y = cordinates_convert(cords, constants.WINDOW_ATTRIBUTES)
     rand_x = x + random.randrange(-random_range, random_range)
     rand_y = y + random.randrange(-random_range, random_range)
     pyautogui.click(rand_x, rand_y)
