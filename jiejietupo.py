@@ -24,8 +24,7 @@ class MainJiejie:
     cords = [837, 122]
 
     def __init__(self, retry_time=10):
-        self.x = self.cords[0] + constants.WINDOW_OFFSET[0]
-        self.y = self.cords[1] + constants.WINDOW_OFFSET[1]
+        self.x, self.y = utilities.cordinates_convert(self.cords, constants.WINDOW_ATTRIBUTES)
         self.retry_time = retry_time
 
     def tap_to_main(self):
@@ -207,9 +206,9 @@ class PersonalTuPo:
 
     def refresh(self):
         self.wait_for_next_refresh()
-        click((1404, 772))
+        click((1404, 772), need_convert=True)
         utilities.random_sleep(1, 1)
-        click((1040, 633))
+        click((1040, 633), need_convert=True)
 
 
 
@@ -369,9 +368,9 @@ def main_personaltupo(refresh_time=3, desc=True):
 def main_all_tupo(refrehs_time=3, desc=True):
     accept_invite()
     main_liaotupo()
-    click((1648, 333))
+    click((1648, 333), need_convert=True)
     main_personaltupo(refrehs_time, desc)
-    click((1648,505))
+    click((1648,505), need_convert=True)
     main_liaotupo()
     while 1:
         time.sleep((10+random.randrange(10, 20))*60)

@@ -8,10 +8,13 @@ from utilities import *
 
 
 
-def click(cords, random_range=5,tired_check=True):
+def click(cords, random_range=5,tired_check=True, need_convert=False):
     if tired_check:
         perform_tired_check()
-    x, y = cordinates_convert(cords, constants.WINDOW_ATTRIBUTES)
+    if need_convert:
+        x, y = cordinates_convert(cords, constants.WINDOW_ATTRIBUTES)
+    else:
+        x, y = cords
     rand_x = x + random.randrange(-random_range, random_range)
     rand_y = y + random.randrange(-random_range, random_range)
     pyautogui.click(rand_x, rand_y)

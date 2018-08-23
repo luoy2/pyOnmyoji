@@ -1,20 +1,10 @@
-import constants
-import time
 from findimg import *
-import img
-from utilities import *
 from ctypes import windll
 import utilities
-from PIL import Image, ImageEnhance
-from grabscreen import grab_screen
-import pytesseract
-import logging
 import combat
-import random
-import pyautogui
-import re
 import enum
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from controller import *
 
 
 user32 = windll.user32
@@ -49,9 +39,11 @@ color_code_convert(color_str)
 
 def change_ss(ss_num):
     if ss_num in (1, 2, 3):
-        click(1050, 1067)
+        click((1050, 1067), need_convert=True)
     else:
-        click(289, 726)
+        click((289, 726), need_convert=True)
+
+
 
 normalize_color_list([[(556, 521), (138, 27, 27)],
                       [(550, 500), (40, 99, 119)],
@@ -61,6 +53,7 @@ raw_exp_full = [[(1015, 541), (252, 156, 26)], [(1012, 550), (234, 174, 17)],[(1
 raw_in_dugeon = [(61, 808), (153, 53, 91)],[(53, 911),(97, 90, 118)],[(215, 972), (58, 44, 87)]
 raw_loot = [[(991, 486), (178, 68, 30)], [(977, 475), (255, 244, 212)], [(1011, 500), (255, 244, 212)]]
 raw_enter_dungeon = [[(1205, 750), (243, 178, 94)], [(1332, 782),(243, 178, 94)], [(825, 762), (243, 178, 94)]]
+raw_combat_boss = [[(861, 290), (254, 251, 245)], [(834, 270), (157, 34, 35)], [(890, 254), (192, 43, 35)]]
 class TansuoColor:
     EnterDungeon = ColorToMatch((1200, 720, 1250, 780), normalize_color_list(raw_enter_dungeon), 2)
     InDungeon = ColorToMatch((40,780,80, 820), normalize_color_list(raw_in_dugeon), 1)
@@ -68,9 +61,7 @@ class TansuoColor:
                            [[(0, 0), (138, 27, 27)], [(-6, -21), (40, 99, 119)], [(14, -21), (193, 168, 132)]], 5)
     CombatIcon = ColorToMatch((0, 0, 1727, 1018),
                               [[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 10)
-    CombatBoss = ColorToMatch((0, 0, 1727, 1018),
-                              [[(0, 0), (239, 178, 186)], [(1, 57), (226, 206, 194)], [(-14, 85), (234, 165, 172)],
-                               [(25, 63), (65, 37, 23)]], 10)
+    CombatBoss = ColorToMatch((577, 67, 1190, 700), normalize_color_list(raw_combat_boss), 15)
     BossLoot = ColorToMatch((552, 255, 1126, 809), normalize_color_list(raw_loot), 1)
 
 
@@ -134,6 +125,7 @@ def swap_full_exp_mons():
 
 
 def tansuo_to_dungeon():
+    logging.info('尝试进入副本。')
     enter_dugeon_loc = wait_for_color(TansuoColor.EnterDungeon, max_time=5)
     if enter_dugeon_loc:
         click(enter_dugeon_loc)
@@ -207,11 +199,14 @@ def search_for_exp(fight_count):
                         logging.info('loot found!')
                         loot_loc = myFindColor(TansuoColor.BossLoot)
                         while loot_loc:
+                            logging.info('picking up loot')
                             click(loot_loc, tired_check=True)
                             utilities.random_sleep(0.5, 1)
                             click((90, 943), tired_check=True, random_range=10)
                             utilities.random_sleep(1.5, 1)
                             loot_loc = myFindColor(TansuoColor.BossLoot)
+                    else:
+                        logging.info('no loot, enter dungeon')
                     return TansuoResult.FinishedWithBoss
                 return search_for_exp(fight_count)
             else:
@@ -237,6 +232,7 @@ def one_tansuo():
         search_for_exp(fight_count)
         result = wait_for_color(TansuoColor.InDungeon)
         if result == TansuoResult.FinishedWithBoss:
+            print('finished with boss')
             return result
     click((77, 124), random_range=3)
     utilities.random_sleep(0.5, 1)

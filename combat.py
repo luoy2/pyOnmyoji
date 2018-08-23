@@ -51,7 +51,7 @@ class Combat:
             click((798, 337), random_range=30, tired_check=False)
             wait_for_leaving_color(CombatColor.Win,
                                    max_waiting_time=15,
-                                   max_click_time=5,
+                                   max_click_time=8,
                                    clicking=False,
                                    clicking_gap=0.3,
                                    location=(798, 337),
@@ -61,9 +61,10 @@ class Combat:
                 click((57, 940), random_range=3, tired_check=False)
                 utilities.random_sleep(0.2, 0.5)
                 result = myFindColor(CombatColor.Damo)
+            utilities.random_sleep(1, 0.5)
             wait_for_leaving_color(CombatColor.Damo,
                                    max_waiting_time=15,
-                                   max_click_time=3,
+                                   max_click_time=8,
                                    clicking=True,
                                    clicking_gap=0.5,
                                    location=(57, 940),

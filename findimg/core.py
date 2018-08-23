@@ -128,7 +128,7 @@ def click_to_leaving_state(img, retry_time=10, location=None, rand_offset=10):
     count = 0
     while location:
         utilities.random_sleep(0.2, 0.4)
-        click(location, rand_offset, tired_check=False)
+        click(location, rand_offset, tired_check=False, need_convert=True)
         count += 1
         location = findimg(img)
         if count > retry_time:
@@ -192,7 +192,7 @@ def wait_for_leaving_color(color,
             time.sleep(0.2)
             if clicking:
                 utilities.random_sleep(clicking_gap, 0.2)
-                click(click_location, rand_offset, tired_check=False)
+                click(click_location, rand_offset, tired_check=False, need_convert=True)
                 count += 1
                 if count > max_click_time:
                     logging.info(f'failed to leave state {img} for {retry_time}.')
