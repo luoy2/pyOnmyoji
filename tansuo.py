@@ -62,7 +62,7 @@ class TansuoColor:
     CombatIcon = ColorToMatch((0, 0, 1727, 1018),
                               [[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 10)
     CombatBoss = ColorToMatch((577, 67, 1190, 700), normalize_color_list(raw_combat_boss), 15)
-    BossLoot = ColorToMatch((552, 255, 1126, 809), normalize_color_list(raw_loot), 1)
+    BossLoot = ColorToMatch((300, 255, 1126, 809), normalize_color_list(raw_loot), 1)
 
 
 
@@ -194,7 +194,7 @@ def search_for_exp(fight_count):
                     this_fight = combat.Combat('探索BOSS', combat_time_limit=60 * 1 + random.randint(40, 80))
                     combat_result = this_fight.start(auto_ready=False)
                     time.sleep(2)
-                    loc = wait_for_color(TansuoColor.InDungeon)
+                    loc = wait_for_color(TansuoColor.InDungeon, max_time=3)
                     if loc:
                         logging.info('loot found!')
                         loot_loc = myFindColor(TansuoColor.BossLoot)
@@ -207,6 +207,7 @@ def search_for_exp(fight_count):
                             loot_loc = myFindColor(TansuoColor.BossLoot)
                     else:
                         logging.info('no loot, enter dungeon')
+                    print('完成boss战斗')
                     return TansuoResult.FinishedWithBoss
                 return search_for_exp(fight_count)
             else:
@@ -229,11 +230,11 @@ def one_tansuo():
     for find_time in range(4):
         print(f'找怪第{find_time+1}次')
         next_scene()
-        search_for_exp(fight_count)
-        result = wait_for_color(TansuoColor.InDungeon)
+        result = search_for_exp(fight_count)
         if result == TansuoResult.FinishedWithBoss:
             print('finished with boss')
             return result
+        wait_for_color(TansuoColor.InDungeon)
     click((77, 124), random_range=3)
     utilities.random_sleep(0.5, 1)
     click((1030, 557), random_range=3, tired_check=False)
