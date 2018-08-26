@@ -355,8 +355,14 @@ def main_personaltupo(refresh_time=3, desc=True):
                    int((next_target.region[3] + next_target.region[1])/2)))
             attack_cords = wait_for_state(img.jiejietupo_img.ATTACK, confidence=0.9)
             click(attack_cords)
-            this_fight = combat.Combat('结界突破', combat_time_limit=60*5+random.randint(40, 80))
-            combat_result = this_fight.start(auto_ready=True)
+            this_fight = combat.Combat('结界突破', combat_time_limit=60*2+random.randint(40, 80))
+            try:
+                combat_result = this_fight.start(auto_ready=True)
+            except TimeoutError:
+                logging.warning('Failed to finish tupo combat!')
+                escape()
+                utilities.random_sleep(1, 0.5)
+                break
             logging.debug('finished one tupo')
             tupo_main.tap_to_main()
             remain = personal_tupo.get_remain_chance()
@@ -374,8 +380,10 @@ def main_all_tupo(refrehs_time=3, desc=True):
     main_liaotupo()
     while 1:
         time.sleep((10+random.randrange(10, 20))*60)
+        click((1648, 333), need_convert=True)
+        main_personaltupo(refrehs_time, desc)
+        click((1648, 505), need_convert=True)
         main_liaotupo()
-
 
 
 

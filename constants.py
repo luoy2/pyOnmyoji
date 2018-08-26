@@ -1,8 +1,9 @@
 from serpent.game import Game
 from serpent.input_controller import InputController, InputControllers
 import random
+import pyautogui
 
-
+pyautogui.FAILSAFE = False
 TIRED_SCALE = None
 TIRED_LIMIT = None
 WINDOW_OFFSET = None

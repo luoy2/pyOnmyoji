@@ -5,7 +5,7 @@ from colors.util import *
 import time
 import datetime
 import constants
-from controller import click
+from controller import *
 import logging
 import utilities
 import numpy as np
