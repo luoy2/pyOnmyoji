@@ -83,4 +83,10 @@ class CombatColor:
 
 
 
-
+raw_map = [(164, 944), (160, 105, 43)], [(113, 930), (87, 30, 94)], [(180, 940), (154, 99, 37), 2]
+raw_main = [[(1674, 900), (222, 205, 200)], [(1681, 832), (207, 167, 109)], [(1676, 976), (193, 86, 77)]]
+raw_jiejie = [[(837, 122), (248, 243, 224)]]
+class LocatorColor:
+    Map = ColorToMatch((164-5, 944-5, 164+5, 944+5), normalize_color_list(raw_map), 2)
+    Main = ColorToMatch((1674-5, 900-5, 1674+5, 900+5), normalize_color_list(raw_main), 2)
+    Jiejie = ColorToMatch((836, 121, 838, 123), normalize_color_list(raw_jiejie), 0)

@@ -20,21 +20,16 @@ class EnterJiejieDashboardFailed(Exception):
 
 
 class MainJiejie:
-    color = (248, 243, 224)
-    cords = [837, 122]
 
     def __init__(self, retry_time=10):
-        self.x, self.y = utilities.cordinates_convert(self.cords, constants.WINDOW_ATTRIBUTES)
         self.retry_time = retry_time
 
     def tap_to_main(self):
         count = 0
-        location = (491, 113)
-        rand_offset = 20
-        while not pyautogui.pixelMatchesColor(self.x, self.y, self.color, tolerance=2):
+        while not myFindColor(LocatorColor.Jiejie):
             # print(pyautogui.pixel(self.x, self.y))
-            time.sleep(0.2)
-            click(location, rand_offset, tired_check=False)
+            utilities.random_sleep(0.1, 0.2)
+            click((491, 113), random_range=20, tired_check=False, need_convert=True)
             count += 1
             if count > self.retry_time:
                 logging.info(f'failed to enter jiejie for {self.retry_time}.')
@@ -379,10 +374,21 @@ def main_all_tupo(refrehs_time=3, desc=True):
     click((1648,505), need_convert=True)
     main_liaotupo()
     while 1:
+        escape()
         time.sleep((10+random.randrange(10, 20))*60)
-        click((1648, 333), need_convert=True)
-        main_personaltupo(refrehs_time, desc)
-        click((1648, 505), need_convert=True)
+        wait_for_color(LocatorColor.Main)
+        time.sleep(1)
+        constants.INPUT_CONTROLLER.move(1570, 720)
+        constants.INPUT_CONTROLLER.drag(x0=1570+random.randrange(30),
+                                        y0=720-random.randrange(10),
+                                        x1=173+random.randrange(30), y1=720-random.randrange(10), duration=0.5)
+        utilities.random_sleep(0.2, 0.5)
+        click((681, 263), random_range=10, need_convert=True)
+        wait_for_color(LocatorColor.Map)
+        click((420, 943), random_range=3, need_convert=True)
+        utilities.random_sleep(1, 2)
+        click((1648, 505), random_range=3, need_convert=True)
+        utilities.random_sleep(1, 1.5)
         main_liaotupo()
 
 

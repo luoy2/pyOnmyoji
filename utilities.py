@@ -2,6 +2,7 @@ import time
 import random
 import win32gui
 import struct
+import logging
 
 _original_scale={'width': 1704, 'height': 960, 'x_offset': 12, 'y_offset': 47}
 
@@ -12,7 +13,9 @@ def hex2rgb(hex_str):
 
 
 def random_sleep(base=1, multiplier=1):
-    time.sleep(base+random.uniform(0,multiplier))
+    sleep_time = base+random.uniform(0,multiplier)
+    logging.debug(f'random sleep time {sleep_time} seconds...')
+    time.sleep(sleep_time)
 
 
 def get_window_info(wdname = u'阴阳师-网易游戏'):  # 获取阴阳师窗口信息
