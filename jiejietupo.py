@@ -11,6 +11,8 @@ import logging
 import combat
 import random
 import pyautogui
+import sys
+
 
 class LiaotupoFinishedException(Exception):
     pass
@@ -154,9 +156,9 @@ class LiaoTuPo:
             single_target = SingleTarget(i)
             if single_target.avaliable:
                 break
-        if single_target.finished:
-            self.logger.info('所有结界都已经被突破！')
-            raise LiaotupoFinishedException()
+            if single_target.finished:
+                self.logger.info('所有结界都已经被突破！')
+                raise LiaotupoFinishedException
         if not single_target.avaliable:
             self.logger.info('cannot find avaliable target in this page!')
             # self.avaliable_target_page += 1
@@ -257,7 +259,7 @@ class SingleTarget:
         finished_x, finished_y = cordinates_scale((FinishedJiejie.x_offset, FinishedJiejie.y_offset), constants.WINDOW_ATTRIBUTES)
         finished_x = self.region[0] + finished_x
         finished_y = self.region[1] + finished_y
-        self.finished = pyautogui.pixelMatchesColor(finished_x, finished_y, FinishedJiejie.color, tolerance=10)
+        self.finished = pyautogui.pixelMatchesColor(finished_x, finished_y, FinishedJiejie.color, tolerance=15)
         if self.finished:
             self.logger.debug(f'tupo target at {self.region} finished.')
             return 0
@@ -309,7 +311,14 @@ def main_liaotupo():
             next_target = liao_tupo.get_next_avaliable_target()
             click((int((next_target.region[2] + next_target.region[0])/2),
                    int((next_target.region[3] + next_target.region[1])/2)))
-            attack_cords = wait_for_color(JiejieColor.LiaoAttack)
+            this_color = JiejieColor.LiaoAttack
+            y_offset_top, y_offset_bottom = 593-729, 920-549
+            y_offset_top, y_offset_bottom = cordinates_scale((y_offset_top, y_offset_bottom), constants.WINDOW_ATTRIBUTES)
+            this_color.region = [next_target.region[0], next_target.region[1]+y_offset_top,
+                                 next_target.region[2], next_target.region[1]+y_offset_bottom]
+            this_color.screen_shot_region = this_color.get_region_to_screenshot()
+            time.sleep(1)
+            attack_cords = wait_for_color(this_color)
             click(attack_cords)
             this_fight = combat.Combat('阴阳寮突破', combat_time_limit=60*5+random.randint(40, 80))
             combat_result = this_fight.start(auto_ready=True)
@@ -318,8 +327,9 @@ def main_liaotupo():
             logging.debug('finished one tupo')
             remain = liao_tupo.get_remain_chance()
         except LiaotupoFinishedException:
-            break
-
+            # no need to continue
+            return 1
+    return 0
 
 def main_personaltupo(refresh_time=3, desc=True):
     '''
@@ -340,7 +350,14 @@ def main_personaltupo(refresh_time=3, desc=True):
             logging.debug(f'this target have {next_target.metals} metal.')
             click((int((next_target.region[2] + next_target.region[0])/2),
                    int((next_target.region[3] + next_target.region[1])/2)))
-            attack_cords = wait_for_color(JiejieColor.PersonalAttack)
+            this_color = JiejieColor.PersonalAttack
+            x_offset, y_offset = 423-185, 547-171
+            x_offset, y_offset = cordinates_scale((x_offset, y_offset), constants.WINDOW_ATTRIBUTES)
+            this_color.region = [next_target.region[0], next_target.region[1],
+                                 next_target.region[2]+x_offset, next_target.region[1]+y_offset]
+            this_color.screen_shot_region = this_color.get_region_to_screenshot()
+            time.sleep(1)
+            attack_cords = wait_for_color(this_color)
             click(attack_cords)
             this_fight = combat.Combat('结界突破', combat_time_limit=60*2+random.randint(40, 80))
             try:
@@ -356,16 +373,17 @@ def main_personaltupo(refresh_time=3, desc=True):
         else:
             personal_tupo.refresh()
             wait_for_state(img.jiejietupo_img.MAIN_TUPO)
+    return 0
 
 
 def main_all_tupo(refrehs_time=3, desc=True):
     accept_invite()
-    main_liaotupo()
+    liao_status = main_liaotupo()
     click((1648, 333), need_convert=True)
-    main_personaltupo(refrehs_time, desc)
+    personal_status = main_personaltupo(refrehs_time, desc)
     click((1648,505), need_convert=True)
-    main_liaotupo()
-    while 1:
+    while personal_status and liao_status:
+        liao_status = main_liaotupo()
         escape()
         time.sleep((10+random.randrange(10, 20))*60)
         wait_for_color(LocatorColor.Main)
@@ -381,7 +399,6 @@ def main_all_tupo(refrehs_time=3, desc=True):
         utilities.random_sleep(1, 2)
         click((1648, 505), random_range=3, need_convert=True)
         utilities.random_sleep(1, 1.5)
-        main_liaotupo()
 
 
 

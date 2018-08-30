@@ -43,13 +43,26 @@ class Combat:
         lose_loc = myFindColor(CombatColor.Lose)
         cur_time = datetime.datetime.now()
         while not win_loc and not lose_loc:
-            time.sleep(0.3)
             win_loc = myFindColor(CombatColor.Win)
             lose_loc = myFindColor(CombatColor.Lose)
             # self.logger.debug(f'win_loc: {win_loc}; lose_loc: {lose_loc}')
             if (datetime.datetime.now() - cur_time).seconds > self.combat_time_limit:
                 self.logger.debug('time out ending combat.')
-                raise TimeoutError
+                if myFindColor(CombatColor.Damo):
+                    leaving_test = 0
+                    while leaving_test < 3:
+                        utilities.random_sleep(0.2, 0.5)
+                        wait_for_leaving_color(CombatColor.Damo,
+                                               max_waiting_time=15,
+                                               max_click_time=8,
+                                               clicking=True,
+                                               clicking_gap=0.2,
+                                               location=(57, 940),
+                                               rand_offset=20)
+                        leaving_test += 1
+                    return CombatResult.WIN
+                else:
+                    raise TimeoutError
         if win_loc:
             click((798, 337), random_range=30, tired_check=False, need_convert=True)
             wait_for_leaving_color(CombatColor.Win,
@@ -115,5 +128,5 @@ if __name__ == '__main__':
         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
         datefmt="%Y-%m-%d %H:%M:%S")
     #
-    constants.init_constants(u'[#] 阴阳师-网易游戏 [#]', move_window=False)
+    constants.init_constants(u'阴阳师-网易游戏', move_window=True)
     self = Combat('test')
