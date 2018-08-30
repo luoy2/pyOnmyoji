@@ -47,13 +47,13 @@ class JIEJIE_OCR_LOCATION:
 class FinishedJiejie:
     x_offset = 1502-1097 #405
     y_offset = 249-167 #82
-    color = (102, 23, 38)
+    color = (95, 22, 35)
 
 
 class FailedJiejie:
-    x_offset = 1511-1097 #414
-    y_offset = 360-348 #12
-    color = (41, 9, 4)
+    x_offset = 1060-640 #414
+    y_offset = 1271-1225 #12
+    color = (225, 188, 98)
 
 
 
@@ -68,18 +68,18 @@ class Metals:
 class LiaoTupoTargetsCords(list):
     def __init__(self):
         super().__init__()
-        x_start = 651
-        y_start = 188
-        x_end = 1099
-        y_end = 364
+        x_start = 555
+        y_start = 186
+        x_end = 1003
+        y_end = 363
 
-        y_add = 369-188
-        x_add = 1103 - 651
+        y_add = 368-186
+        x_add = 1006 - 555
+        x_add, y_add = cordinates_scale((x_add, y_add), constants.WINDOW_ATTRIBUTES)
 
-        start_loc = [x_start+constants.WINDOW_OFFSET[0],
-                     y_start+constants.WINDOW_OFFSET[1],
-                     x_end+constants.WINDOW_OFFSET[0],
-                     y_end+constants.WINDOW_OFFSET[1]]
+        x1, y1 = cordinates_convert((x_start, y_start), constants.WINDOW_ATTRIBUTES)
+        x2, y2 = cordinates_convert((x_end, y_end), constants.WINDOW_ATTRIBUTES)
+        start_loc = [x1, y1, x2, y2]
         for row in range(4):
             for col in range(2):
                 cords = [start_loc[0] + x_add*col,
@@ -99,11 +99,11 @@ class PersonalTupoTargetsCords(list):
 
         y_add = 348 - 167
         x_add = 640 - 183
+        x_add, y_add = cordinates_scale((x_add, y_add), constants.WINDOW_ATTRIBUTES)
 
-        start_loc = [x_start + constants.WINDOW_OFFSET[0],
-                     y_start + constants.WINDOW_OFFSET[1],
-                     x_end + constants.WINDOW_OFFSET[0],
-                     y_end + constants.WINDOW_OFFSET[1]]
+        x1, y1 = cordinates_convert((x_start, y_start), constants.WINDOW_ATTRIBUTES)
+        x2, y2 = cordinates_convert((x_end, y_end), constants.WINDOW_ATTRIBUTES)
+        start_loc = [x1, y1, x2, y2]
         # Image.fromarray(grab_screen(start_loc)).show()
         for row in range(3):
             for col in range(3):
@@ -127,7 +127,7 @@ class LiaoTuPo:
 
     def next_page(self):
         for i in range(4):
-            pyautogui.moveTo(1097, 512)
+            pyautogui.moveTo(cordinates_convert((1097, 512), constants.WINDOW_ATTRIBUTES))
             constants.INPUT_CONTROLLER.scroll()
             time.sleep(0.2)
             constants.INPUT_CONTROLLER.scroll()
@@ -135,10 +135,8 @@ class LiaoTuPo:
 
 
     def get_remain_chance(self):
-        x1 = JIEJIE_OCR_LOCATION.LIAOTUPO_CHANCE_LEFT[0] + constants.WINDOW_OFFSET[0]
-        y1 = JIEJIE_OCR_LOCATION.LIAOTUPO_CHANCE_LEFT[1] + constants.WINDOW_OFFSET[1]
-        x2 = JIEJIE_OCR_LOCATION.LIAOTUPO_CHANCE_LEFT[2] + constants.WINDOW_OFFSET[0]
-        y2 = JIEJIE_OCR_LOCATION.LIAOTUPO_CHANCE_LEFT[3] + constants.WINDOW_OFFSET[1]
+        x1, y1 = cordinates_convert((322, 849), constants.WINDOW_ATTRIBUTES)
+        x2, y2 = cordinates_convert((345, 880), constants.WINDOW_ATTRIBUTES)
         img = grab_screen([x1, y1, x2, y2])
         img = Image.fromarray(img)
         remain = int(pytesseract.image_to_string(img, config='-psm 6').replace('O', '0'))
@@ -148,9 +146,9 @@ class LiaoTuPo:
 
     def get_next_avaliable_target(self):
         self.logger.info(f'move to page {self.avaliable_target_page}')
-        for i in range(self.avaliable_target_page-self.current_page):
-            self.next_page()
-            self.current_page+=1
+        # for i in range(self.avaliable_target_page-self.current_page):
+        #     self.next_page()
+        #     self.current_page+=1
         single_target = None
         for i in self.targets_cords:
             single_target = SingleTarget(i)
@@ -161,7 +159,8 @@ class LiaoTuPo:
             raise LiaotupoFinishedException()
         if not single_target.avaliable:
             self.logger.info('cannot find avaliable target in this page!')
-            self.avaliable_target_page += 1
+            # self.avaliable_target_page += 1
+            self.next_page()
             return self.get_next_avaliable_target()
         return single_target
 
@@ -171,7 +170,7 @@ class PersonalTuPo:
     def __init__(self, desc=True):
         import constants
         self.waiting_color = (176, 169, 161)
-        self.waiting_color_cords = (1402 + constants.WINDOW_OFFSET[0], 771 + constants.WINDOW_OFFSET[1])
+        self.waiting_color_cords = cordinates_convert((1402, 771), constants.WINDOW_ATTRIBUTES)
         self.logger = logging.getLogger(u'个人突破main')
         self.targets_cords = PersonalTupoTargetsCords()
         self.desc=desc
@@ -184,8 +183,8 @@ class PersonalTuPo:
         while pyautogui.pixelMatchesColor(self.waiting_color_cords[0],
                                           self.waiting_color_cords[1],
                                           self.waiting_color):
-            MINUTE_CORDS = utilities.add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_MINUTE, constants.WINDOW_ATTRIBUTES)
-            SECOND_CORDS = utilities.add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_SECOND, constants.WINDOW_ATTRIBUTES)
+            MINUTE_CORDS = add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_MINUTE, constants.WINDOW_ATTRIBUTES)
+            SECOND_CORDS = add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_SECOND, constants.WINDOW_ATTRIBUTES)
             minute_img = Image.fromarray(grab_screen(MINUTE_CORDS))
             minute_str = pytesseract.image_to_string(minute_img, lang='eng', config='-psm 6').replace('O', '0')
             second_img = Image.fromarray(grab_screen(SECOND_CORDS))
@@ -208,7 +207,7 @@ class PersonalTuPo:
 
 
     def get_remain_chance(self):
-        chance_location = utilities.add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_TUPO_CHANCE_LEFT, constants.WINDOW_ATTRIBUTES)
+        chance_location = add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_TUPO_CHANCE_LEFT, constants.WINDOW_ATTRIBUTES)
         img = grab_screen(chance_location)
         img = Image.fromarray(img)
         remain = int(pytesseract.image_to_string(img, config='-psm 6').replace('O', '0'))
@@ -245,8 +244,9 @@ class SingleTarget:
         # self.metals = self._check_metal()
 
     def _check_not_failed(self):
-        fail_x = self.region[0] + FailedJiejie.x_offset
-        fail_y = self.region[1] + FailedJiejie.y_offset
+        fail_x, fail_y = cordinates_scale((FailedJiejie.x_offset, FailedJiejie.y_offset), constants.WINDOW_ATTRIBUTES)
+        fail_x = self.region[0] + fail_x
+        fail_y = self.region[1] + fail_y
         self.failed = pyautogui.pixelMatchesColor(fail_x, fail_y, FailedJiejie.color, tolerance=10)
         if self.failed:
             self.logger.debug(f'tupo target at {self.region} failed.')
@@ -254,8 +254,9 @@ class SingleTarget:
         return 1
 
     def _check_not_finished(self):
-        finished_x = self.region[0] + FinishedJiejie.x_offset
-        finished_y = self.region[1] + FinishedJiejie.y_offset
+        finished_x, finished_y = cordinates_scale((FinishedJiejie.x_offset, FinishedJiejie.y_offset), constants.WINDOW_ATTRIBUTES)
+        finished_x = self.region[0] + finished_x
+        finished_y = self.region[1] + finished_y
         self.finished = pyautogui.pixelMatchesColor(finished_x, finished_y, FinishedJiejie.color, tolerance=10)
         if self.finished:
             self.logger.debug(f'tupo target at {self.region} finished.')
@@ -265,10 +266,11 @@ class SingleTarget:
     # TODO: Check metal number
     def _check_metal(self):
         metals = Metals()
-        metal_y = metals.y_offset + self.region[1]
         total_metal = 0
-        for x in metals.x_offset_list:
+        for x_offset in metals.x_offset_list:
+            x, y = cordinates_scale((x_offset, metals.y_offset), constants.WINDOW_ATTRIBUTES)
             metal_x = x + self.region[0]
+            metal_y = y + self.region[1]
             if not self.finished:
                 if not pyautogui.pixelMatchesColor(metal_x, metal_y, Metals.color, tolerance=10):
                     total_metal += 1
@@ -287,16 +289,6 @@ class SingleTarget:
         return not_finish and not_fail
 
 
-    def get_name(self):
-        x1 = self.region[0] + constants.WINDOW_OFFSET[0]
-        y1 = self.region[1] + constants.WINDOW_OFFSET[1]
-        x2 = self.region[2] + constants.WINDOW_OFFSET[0]
-        y2 = self.region[3] + constants.WINDOW_OFFSET[1]
-        img = grab_screen([x1, y1, x2, y2])
-        img = Image.fromarray(img)
-        name = pytesseract.image_to_string(img, lang='chi_sim')
-        self.logger.debug(f'target name: {name}')
-        return name
 
 
 
@@ -317,7 +309,7 @@ def main_liaotupo():
             next_target = liao_tupo.get_next_avaliable_target()
             click((int((next_target.region[2] + next_target.region[0])/2),
                    int((next_target.region[3] + next_target.region[1])/2)))
-            attack_cords = wait_for_state(img.jiejietupo_img.ATTACK, confidence=0.9)
+            attack_cords = wait_for_color(JiejieColor.LiaoAttack)
             click(attack_cords)
             this_fight = combat.Combat('阴阳寮突破', combat_time_limit=60*5+random.randint(40, 80))
             combat_result = this_fight.start(auto_ready=True)
@@ -348,7 +340,7 @@ def main_personaltupo(refresh_time=3, desc=True):
             logging.debug(f'this target have {next_target.metals} metal.')
             click((int((next_target.region[2] + next_target.region[0])/2),
                    int((next_target.region[3] + next_target.region[1])/2)))
-            attack_cords = wait_for_state(img.jiejietupo_img.ATTACK, confidence=0.9)
+            attack_cords = wait_for_color(JiejieColor.PersonalAttack)
             click(attack_cords)
             this_fight = combat.Combat('结界突破', combat_time_limit=60*2+random.randint(40, 80))
             try:
@@ -397,7 +389,7 @@ if __name__ == '__main__':
     user32 = windll.user32
     user32.SetProcessDPIAware()
 
-    constants.init_constants(u'阴阳师-网易游戏', move_window=True)
+    constants.init_constants(u'阴阳师-网易游戏', move_window=1)
     logging.basicConfig(
         level=0,
         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',

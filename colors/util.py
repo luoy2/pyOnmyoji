@@ -90,3 +90,9 @@ class LocatorColor:
     Map = ColorToMatch((164-5, 944-5, 164+5, 944+5), normalize_color_list(raw_map), 2)
     Main = ColorToMatch((1674-5, 900-5, 1674+5, 900+5), normalize_color_list(raw_main), 2)
     Jiejie = ColorToMatch((836, 121, 838, 123), normalize_color_list(raw_jiejie), 0)
+
+
+
+class JiejieColor:
+    LiaoAttack = ColorToMatch([537, 169, 1459, 963], [[(0, 0), (243, 178, 94)], [(33, -37), (150, 59, 46)], [(-331, -3), (243, 178, 94)]], 1)
+    PersonalAttack = ColorToMatch([163, 165, 1565, 964], [[(0, 0), (243, 178, 94)], [(78, -32), (151, 60, 46)], [(-80, 33), (152, 61, 46)]], 1)
