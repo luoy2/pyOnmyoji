@@ -1,5 +1,4 @@
-from grabscreen import grab_screen
-from PIL import Image
+from findimg.core import *
 
 
 def normalize_color_list(color_list):
@@ -82,17 +81,57 @@ class CombatColor:
 
 
 
+class JiejieColor:
+    LiaoAttack = ColorToMatch([537, 169, 1459, 963], [[(0, 0), (243, 178, 94)], [(33, -37), (150, 59, 46)], [(-331, -3), (243, 178, 94)]], 1)
+    PersonalAttack = ColorToMatch([163, 165, 1565, 964], [[(0, 0), (243, 178, 94)], [(78, -32), (151, 60, 46)], [(-80, 33), (152, 61, 46)]], 1)
+
+
+
+
+
+
+
+raw_exp_full = [[(1015, 541), (252, 156, 26)], [(1012, 550), (234, 174, 17)],[(1036, 559), (249, 221, 6)]]
+raw_in_dugeon = [(61, 808), (153, 53, 91)],[(53, 911),(97, 90, 118)],[(215, 972), (58, 44, 87)]
+raw_loot = [[(991, 486), (178, 68, 30)], [(977, 475), (255, 244, 212)], [(1011, 500), (255, 244, 212)]]
+raw_enter_dungeon = [[(1205, 750), (243, 178, 94)], [(1332, 782),(243, 178, 94)], [(825, 762), (243, 178, 94)]]
+raw_combat_boss = [[(861, 290), (254, 251, 245)], [(834, 270), (157, 34, 35)], [(890, 254), (192, 43, 35)]]
+class TansuoColor:
+    EnterDungeon = ColorToMatch((1200, 720, 1250, 780), normalize_color_list(raw_enter_dungeon), 2)
+    InDungeon = ColorToMatch((40,780,80, 820), normalize_color_list(raw_in_dugeon), 1)
+    ExpIcon = ColorToMatch((97, 323, 1646, 830), [[(0, 0), (155, 33, 34)], [(6, 0), (130, 29, 29)], [(1, -15), (46, 116, 130)]], 5)
+    CombatIcon = ColorToMatch((0, 0, 1727, 1018),
+                              [[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 10)
+    CombatBoss = ColorToMatch([636, 179, 1140, 426], [[(0, 0), (182, 51, 53)], [(-5, 30), (233, 161, 169)], [(38, -32), (187, 44, 45)]], 5)
+    BossLoot = ColorToMatch((300, 255, 1400, 809), normalize_color_list(raw_loot), 1)
+
+
+
+TansuoExpColor = {
+    1: ColorToMatch((849, 424, 1208, 837), normalize_color_list(raw_exp_full), 15),
+    2: ColorToMatch((584, 306, 796, 630), normalize_color_list(raw_exp_full), 15),
+    3: ColorToMatch((296, 283, 556, 545), normalize_color_list(raw_exp_full), 15),
+}
+
+
+
 
 raw_map = [(164, 944), (160, 105, 43)], [(113, 930), (87, 30, 94)], [(180, 940), (154, 99, 37), 2]
 raw_main = [[(1674, 900), (222, 205, 200)], [(1681, 832), (207, 167, 109)], [(1676, 976), (193, 86, 77)]]
 raw_jiejie = [[(837, 122), (248, 243, 224)]]
 class LocatorColor:
-    Map = ColorToMatch((164-5, 944-5, 164+5, 944+5), normalize_color_list(raw_map), 2)
-    Main = ColorToMatch((1674-5, 900-5, 1674+5, 900+5), normalize_color_list(raw_main), 2)
+    Map = ColorToMatch((164 - 5, 944 - 5, 164 + 5, 944 + 5), normalize_color_list(raw_map), 2)
+    Main = ColorToMatch((1674 - 5, 900 - 5, 1674 + 5, 900 + 5), normalize_color_list(raw_main), 2)
     Jiejie = ColorToMatch((836, 121, 838, 123), normalize_color_list(raw_jiejie), 0)
 
 
+def get_map_location():
+    color_list = [LocatorColor.Map, LocatorColor.Main, LocatorColor.Jiejie, CombatColor.InCombat, CombatColor.Damo,
+                  CombatColor.Ready, TansuoColor.InDungeon]
+    for i in color_list:
+        result = myFindColor(i)
+        if result:
+            return i
 
-class JiejieColor:
-    LiaoAttack = ColorToMatch([537, 169, 1459, 963], [[(0, 0), (243, 178, 94)], [(33, -37), (150, 59, 46)], [(-331, -3), (243, 178, 94)]], 1)
-    PersonalAttack = ColorToMatch([163, 165, 1565, 964], [[(0, 0), (243, 178, 94)], [(78, -32), (151, 60, 46)], [(-80, 33), (152, 61, 46)]], 1)
+
+

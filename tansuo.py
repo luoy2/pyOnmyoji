@@ -1,4 +1,5 @@
 from findimg import *
+from colors import *
 from ctypes import windll
 import utilities
 import combat
@@ -45,32 +46,6 @@ def change_ss(ss_num):
 
 
 
-normalize_color_list([[(556, 521), (138, 27, 27)],
-                      [(550, 500), (40, 99, 119)],
-                      [(570, 500), (193, 168, 132)]])
-
-raw_exp_full = [[(1015, 541), (252, 156, 26)], [(1012, 550), (234, 174, 17)],[(1036, 559), (249, 221, 6)]]
-raw_in_dugeon = [(61, 808), (153, 53, 91)],[(53, 911),(97, 90, 118)],[(215, 972), (58, 44, 87)]
-raw_loot = [[(991, 486), (178, 68, 30)], [(977, 475), (255, 244, 212)], [(1011, 500), (255, 244, 212)]]
-raw_enter_dungeon = [[(1205, 750), (243, 178, 94)], [(1332, 782),(243, 178, 94)], [(825, 762), (243, 178, 94)]]
-raw_combat_boss = [[(861, 290), (254, 251, 245)], [(834, 270), (157, 34, 35)], [(890, 254), (192, 43, 35)]]
-class TansuoColor:
-    EnterDungeon = ColorToMatch((1200, 720, 1250, 780), normalize_color_list(raw_enter_dungeon), 2)
-    InDungeon = ColorToMatch((40,780,80, 820), normalize_color_list(raw_in_dugeon), 1)
-    ExpIcon = ColorToMatch((97, 323, 1646, 830),
-                           [[(0, 0), (138, 27, 27)], [(-6, -21), (40, 99, 119)], [(14, -21), (193, 168, 132)]], 5)
-    CombatIcon = ColorToMatch((0, 0, 1727, 1018),
-                              [[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 10)
-    CombatBoss = ColorToMatch((577, 67, 1190, 700), normalize_color_list(raw_combat_boss), 15)
-    BossLoot = ColorToMatch((300, 255, 1126, 809), normalize_color_list(raw_loot), 1)
-
-
-
-TansuoExpColor = {
-    1: ColorToMatch((849, 424, 1208, 837), normalize_color_list(raw_exp_full), 15),
-    2: ColorToMatch((584, 306, 796, 630), normalize_color_list(raw_exp_full), 15),
-    3: ColorToMatch((296, 283, 556, 545), normalize_color_list(raw_exp_full), 15),
-}
 
 slot_loc = {1:[277, 526],
             2:[853, 520],
