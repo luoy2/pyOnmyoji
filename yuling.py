@@ -7,20 +7,21 @@ from colors.util import PartyColor
 import img
 import parties
 import time
+import combat
 import utilities
 import multiprocessing
 
 class YuLinColor:
     ChooseYuLin = ColorToMatch([1140, 440, 1180, 520], [[(0, 0), (249, 243, 252)], [(-53, 50), (44, 168, 141)], [(-1, 127), (84, 67, 80)]], 1)
-    ReadyFightYuLinChi = ColorToMatch([1252, 684, 1357, 758], [[(0, 0), (243, 178, 94)], [(36, -27), (152, 61, 46)], [(-286, -252), (242, 250, 249)]], 1)
+    ReadyFightYuLinChi = ColorToMatch([1237, 677, 1340, 738], [[(0, 0), (243, 178, 94)], [(77, -30), (152, 61, 46)], [(75, 36), (151, 60, 46)]], 1)
 
 
 YuLinOCRLocation = {
-    "CHI": [1040, 68, 1099, 99],
+    "REMAIN": [1297, 68, 1360, 100],
 }
 
 class YuLinFighter:
-    def __init__(self, type="CHI"):
+    def __init__(self, type="REMAIN"):
         self.type = type
         self.logger = logging.getLogger(__name__)
 
@@ -40,19 +41,8 @@ class YuLinFighter:
         while self.get_remain_chance():
             fight_loc = wait_for_color(YuLinColor.ReadyFightYuLinChi, max_time=10)
             click(fight_loc, random_range=5, tired_check=True)
-            utilities.random_sleep(90, 60*3)
-            wait_for_color(CombatColor.Damo, max_time=60*5)
-            leaving_test = 0
-            while leaving_test < 3:
-                utilities.random_sleep(0.2, 0.5)
-                wait_for_leaving_color(CombatColor.Damo,
-                                       max_waiting_time=15,
-                                       max_click_time=8,
-                                       clicking=True,
-                                       clicking_gap=0.2,
-                                       location=(57, 940),
-                                       rand_offset=20)
-                leaving_test += 1
+            this_fight = combat.Combat('御灵', combat_time_limit=60 * 5 + random.randint(40, 80))
+            combat_result = this_fight.start(auto_ready=True)
 
 
 

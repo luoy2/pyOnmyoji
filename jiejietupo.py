@@ -75,7 +75,7 @@ class LiaoTupoTargetsCords(list):
         x_end = 1003
         y_end = 363
 
-        y_add = 368-186
+        y_add = 180
         x_add = 1006 - 555
         x_add, y_add = cordinates_scale((x_add, y_add), constants.WINDOW_ATTRIBUTES)
 
@@ -321,15 +321,23 @@ def main_liaotupo():
             attack_cords = wait_for_color(this_color)
             click(attack_cords)
             this_fight = combat.Combat('阴阳寮突破', combat_time_limit=60*5+random.randint(40, 80))
-            combat_result = this_fight.start(auto_ready=True)
+            try:
+                combat_result = this_fight.start(auto_ready=True)
+            except TimeoutError:
+                logging.warning('Failed to finish tupo combat!')
+                click((986, 629), tired_check=False, need_convert=True)
+                escape()
+                utilities.random_sleep(1, 0.5)
+                click((986, 629), tired_check=False, need_convert=True)
+                combat_result = this_fight.start(auto_ready=True)
             tupo_main.tap_to_main()
             liao_tupo.current_page = 0
             logging.debug('finished one tupo')
             remain = liao_tupo.get_remain_chance()
         except LiaotupoFinishedException:
             # no need to continue
-            return 1
-    return 0
+            return 0
+    return 1
 
 def main_personaltupo(refresh_time=3, desc=True):
     '''
@@ -364,9 +372,11 @@ def main_personaltupo(refresh_time=3, desc=True):
                 combat_result = this_fight.start(auto_ready=True)
             except TimeoutError:
                 logging.warning('Failed to finish tupo combat!')
+                click((986, 629), tired_check=False, need_convert=True)
                 escape()
                 utilities.random_sleep(1, 0.5)
-                break
+                click((986, 629), tired_check=False, need_convert=True)
+                combat_result = this_fight.start(auto_ready=True)
             logging.debug('finished one tupo')
             tupo_main.tap_to_main()
             remain = personal_tupo.get_remain_chance()
@@ -382,7 +392,7 @@ def main_all_tupo(refrehs_time=3, desc=True):
     click((1648, 333), need_convert=True)
     personal_status = main_personaltupo(refrehs_time, desc)
     click((1648,505), need_convert=True)
-    while personal_status and liao_status:
+    while personal_status or liao_status:
         liao_status = main_liaotupo()
         escape()
         time.sleep((10+random.randrange(10, 20))*60)
@@ -456,7 +466,4 @@ if __name__ == '__main__':
 #
 #
 # target_loc_list.append(row_list)
-
-
-
 

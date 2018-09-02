@@ -42,6 +42,7 @@ raw_accept_invite = [[(1142, 607), (97, 186, 108)],
 
 class UtilColor:
     AcceptInvite = ColorToMatch((1095, 544, 1202, 655), normalize_color_list(raw_accept_invite), 1)
+    OutofSushi = ColorToMatch([768, 602, 793, 684], [[(0, 0), (243, 178, 94)], [(-23, -103), (127, 70, 183)], [(40, -153), (106, 69, 133)]], 1)
 
 
 raw_find_chaoguiwang = [[(28, 366), (227, 217, 205)],
@@ -101,7 +102,7 @@ class TansuoColor:
     InDungeon = ColorToMatch((40,780,80, 820), normalize_color_list(raw_in_dugeon), 1)
     ExpIcon = ColorToMatch((97, 323, 1646, 830), [[(0, 0), (155, 33, 34)], [(6, 0), (130, 29, 29)], [(1, -15), (46, 116, 130)]], 5)
     CombatIcon = ColorToMatch((0, 0, 1727, 1018),
-                              [[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 10)
+                              [[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 5)
     CombatBoss = ColorToMatch([636, 179, 1140, 426], [[(0, 0), (182, 51, 53)], [(-5, 30), (233, 161, 169)], [(38, -32), (187, 44, 45)]], 5)
     BossLoot = ColorToMatch((300, 255, 1400, 809), normalize_color_list(raw_loot), 1)
 

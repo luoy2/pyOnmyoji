@@ -35,7 +35,7 @@ class Combat:
         return self.get_result()
 
     def get_result(self):
-        if findimg(img.NOT_ENOUGH_SUSHI):
+        if myFindColor(UtilColor.OutofSushi):
             escape()
             exit(0)
         # wait_for_color(CombatColor.InCombat)
@@ -74,7 +74,7 @@ class Combat:
                                    rand_offset=30)
             result = None
             while not result:
-                click((57, 940), random_range=3, tired_check=False)
+                click((57, 940), random_range=3, tired_check=False, need_convert=True)
                 utilities.random_sleep(0.2, 0.5)
                 result = myFindColor(CombatColor.Damo)
             leaving_test = 0
@@ -90,11 +90,11 @@ class Combat:
                 leaving_test += 1
             return CombatResult.WIN
         elif lose_loc:
-            click((798, 337), random_range=30, tired_check=False)
+            click((798, 337), random_range=30, tired_check=False, need_convert=True)
             wait_for_leaving_color(CombatColor.Lose,
                                    max_waiting_time=15,
                                    max_click_time=3,
-                                   clicking=False,
+                                   clicking=True,
                                    clicking_gap=0.2,
                                    location=(798, 337),
                                    rand_offset=30)
@@ -107,7 +107,7 @@ class Combat:
 
 
     def exist(self):
-        click((63, 90), tired_check=False)
+        click((63, 90), tired_check=False, need_convert=True)
         confirm_loc = wait_for_state(img.utilities_img.CONFIRM)
         click(confirm_loc, tired_check=False)
         self.get_result()

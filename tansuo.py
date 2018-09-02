@@ -8,14 +8,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from controller import *
 
 
-user32 = windll.user32
-user32.SetProcessDPIAware()
-constants.init_constants()
-logging.basicConfig(
-    level=0,
-    format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
-    datefmt="%Y-%m-%d %H:%M:%S")
-_CAPTAINSLOT = 3
 
 
 
@@ -33,9 +25,6 @@ def color_code_convert(color_str, original_scale=(2048, 1536), current_res=get_w
     return f"ColorToMatch(({new_x0}, {new_y0}, {new_x1}, {new_y1}), {color_list}, {100-int(accuracy)})"
 
 
-color_str = '{0xf8f9ff, "18|16|0x343b6b,-19|14|0xe2e4fc,4|40|0x3e2215,-4|-44|0xf1acb6", 95, 0, 0, 1535, 2047}'
-
-color_code_convert(color_str)
 
 
 def change_ss(ss_num):
@@ -113,7 +102,7 @@ def tansuo_to_dungeon():
         for i in range(random.randrange(50, 100)):
             constants.INPUT_CONTROLLER.scroll()
             time.sleep(0.01)
-        click((1555, 870), random_range=15)
+        click((1555, 870), random_range=15, need_convert=True)
         return tansuo_to_dungeon()
 
 
@@ -147,13 +136,13 @@ def search_for_exp(fight_count):
                 ColorToMatch((max(exp_loc[0] - 200, 0), max(exp_loc[1] - 500,0), exp_loc[0] + 200, exp_loc[1] - 30),
                              [[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 10))
             if combat_loc:
-                print('找到战斗')
+                logging.debug('找到战斗')
                 click(combat_loc)
                 time.sleep(0.5)
                 # if_outof_sushi()
                 combat_loc = myFindColor(TansuoColor.CombatIcon)
                 if combat_loc:
-                    print('进入战斗失败')
+                    logging.debug('进入战斗失败')
                     # check_current_state()
                     return search_for_exp(fight_count)
 
@@ -177,7 +166,7 @@ def search_for_exp(fight_count):
                             logging.info('picking up loot')
                             click(loot_loc, tired_check=True)
                             utilities.random_sleep(0.5, 1)
-                            click((90, 943), tired_check=True, random_range=10)
+                            click((90, 943), tired_check=True, random_range=10, need_convert=True)
                             utilities.random_sleep(1.5, 1)
                             loot_loc = myFindColor(TansuoColor.BossLoot)
                     else:
@@ -195,7 +184,7 @@ def search_for_exp(fight_count):
 def next_scene():
     print('滑动进下一界面')
     constants.INPUT_CONTROLLER.move(1680, 787)
-    constants.INPUT_CONTROLLER.drag(x0=1686, y0=787, x1=687, y1=787, duration=0.2)
+    constants.INPUT_CONTROLLER.drag(x0=1680, y0=787, x1=687, y1=787, duration=0.2)
 
 
 def one_tansuo():
@@ -210,9 +199,9 @@ def one_tansuo():
             print('finished with boss')
             return result
         wait_for_color(TansuoColor.InDungeon)
-    click((77, 124), random_range=3)
+    click((77, 124), random_range=3, need_convert=True)
     utilities.random_sleep(0.5, 1)
-    click((1030, 557), random_range=3, tired_check=False)
+    click((1030, 557), random_range=3, tired_check=False, need_convert=True)
     wait_for_color(TansuoColor.EnterDungeon)
     return TansuoResult.FinishedWithoutBoss
 
@@ -226,6 +215,15 @@ def repeat_tansuo(times=10):
 
 
 if __name__ == '__main__':
+    user32 = windll.user32
+    user32.SetProcessDPIAware()
+    constants.init_constants(move_window=1)
+    logging.basicConfig(
+        level=0,
+        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+        datefmt="%Y-%m-%d %H:%M:%S")
+    _CAPTAINSLOT = 3
+
     repeat_tansuo(15)
 
 
