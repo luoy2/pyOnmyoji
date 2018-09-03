@@ -101,9 +101,8 @@ class TansuoColor:
     EnterDungeon = ColorToMatch((1200, 720, 1250, 780), normalize_color_list(raw_enter_dungeon), 2)
     InDungeon = ColorToMatch((40,780,80, 820), normalize_color_list(raw_in_dugeon), 1)
     ExpIcon = ColorToMatch((97, 323, 1646, 830), [[(0, 0), (155, 33, 34)], [(6, 0), (130, 29, 29)], [(1, -15), (46, 116, 130)]], 5)
-    CombatIcon = ColorToMatch((0, 0, 1727, 1018),
-                              [[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 5)
-    CombatBoss = ColorToMatch([636, 179, 1140, 426], [[(0, 0), (182, 51, 53)], [(-5, 30), (233, 161, 169)], [(38, -32), (187, 44, 45)]], 5)
+    CombatIcon = ColorToMatch((0, 0, 1727, 1018),[[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 5)
+    CombatBoss = ColorToMatch([758, 188, 988, 430], [[(0, 0), (245, 233, 224)], [(-25, 4), (179, 47, 50)], [(-37, 8), (233, 167, 174)]], 5)
     BossLoot = ColorToMatch((300, 255, 1400, 809), normalize_color_list(raw_loot), 1)
 
 

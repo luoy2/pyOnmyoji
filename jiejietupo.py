@@ -21,6 +21,11 @@ class EnterJiejieDashboardFailed(Exception):
     pass
 
 
+def enter_tupo():
+    click((429, 940), tired_check=True, need_convert=True)
+    utilities.random_sleep(1, 1.5)
+
+
 class MainJiejie:
 
     def __init__(self, retry_time=10):

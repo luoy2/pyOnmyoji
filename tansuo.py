@@ -6,6 +6,7 @@ import combat
 import enum
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from controller import *
+from jiejietupo import *
 
 
 
@@ -139,7 +140,7 @@ def search_for_exp(fight_count):
                 logging.debug('找到战斗')
                 click(combat_loc)
                 time.sleep(0.5)
-                # if_outof_sushi()
+                if_outof_sushi()
                 combat_loc = myFindColor(TansuoColor.CombatIcon)
                 if combat_loc:
                     logging.debug('进入战斗失败')
@@ -207,11 +208,31 @@ def one_tansuo():
 
 
 
-def repeat_tansuo(times=10):
+def repeat_tansuo(times=999, liao_sep=8):
     t = 0
     while t < times:
         tansuo_to_dungeon()
         result = one_tansuo()
+        t += 1
+        if not t%liao_sep:
+            enter_tupo()
+            click((1648, 505), random_range=3, need_convert=True)
+            liao_status = main_liaotupo()
+            click((1648, 333), need_convert=True)
+            personal_status = main_personaltupo()
+            click((1648,505), need_convert=True)
+            liao_status = main_liaotupo()
+            escape()
+            wait_for_color(LocatorColor.Main)
+            time.sleep(1)
+            constants.INPUT_CONTROLLER.move(1570, 720)
+            constants.INPUT_CONTROLLER.drag(x0=1570+random.randrange(30),
+                                            y0=720-random.randrange(10),
+                                            x1=173+random.randrange(30), y1=720-random.randrange(10), duration=0.5)
+            utilities.random_sleep(0.2, 0.5)
+            click((681, 263), random_range=10, need_convert=True)
+            wait_for_color(LocatorColor.Map)
+
 
 
 if __name__ == '__main__':
@@ -223,7 +244,21 @@ if __name__ == '__main__':
         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
         datefmt="%Y-%m-%d %H:%M:%S")
     _CAPTAINSLOT = 3
-
-    repeat_tansuo(15)
-
-
+    enter_tupo()
+    click((1648, 505), random_range=3, need_convert=True)
+    liao_status = main_liaotupo()
+    click((1648, 333), need_convert=True)
+    personal_status = main_personaltupo()
+    click((1648, 505), need_convert=True)
+    liao_status = main_liaotupo()
+    escape()
+    wait_for_color(LocatorColor.Main)
+    time.sleep(1)
+    constants.INPUT_CONTROLLER.move(1570, 720)
+    constants.INPUT_CONTROLLER.drag(x0=1570 + random.randrange(30),
+                                    y0=720 - random.randrange(10),
+                                    x1=173 + random.randrange(30), y1=720 - random.randrange(10), duration=0.5)
+    utilities.random_sleep(0.2, 0.5)
+    click((681, 263), random_range=10, need_convert=True)
+    wait_for_color(LocatorColor.Map)
+    repeat_tansuo()

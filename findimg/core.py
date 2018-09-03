@@ -51,7 +51,8 @@ def find_color(color):
             this_match = True
             for single_color in color.color_list:
                 try:
-                    if not _match_color(screen_shot_img, x+single_color[0][0]+offset_x, y+single_color[0][1]+offset_y, single_color[1], color.tolerance):
+                    cords_offset = cordinates_scale((single_color[0][0]+offset_x, single_color[0][1]+offset_y), constants.WINDOW_ATTRIBUTES)
+                    if not _match_color(screen_shot_img, x+cords_offset[0], y+cords_offset[1], single_color[1], color.tolerance):
                         this_match = False
                         break
                 except IndexError:
@@ -74,7 +75,11 @@ def accept_invite():
     if invite_cords:
         click(invite_cords, 5, tired_check=True)
 
-
+def if_outof_sushi():
+    outsushi_result = myFindColor(UtilColor.OutofSushi)
+    if outsushi_result:
+        logging.warning('体力不足!')
+        exit(0)
 
 def findimg(img, confidence=0.98, grayscale=False):
     accept_invite()
