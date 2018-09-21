@@ -98,6 +98,21 @@ def tansuo_to_dungeon():
         if not in_dugeon:
             return tansuo_to_dungeon()
     else:
+        loc = map_locator()
+        if loc == LocatorColor.Main:
+            time.sleep(1)
+            constants.INPUT_CONTROLLER.move(1570, 720)
+            constants.INPUT_CONTROLLER.drag(x0=1570 + random.randrange(30),
+                                            y0=720 - random.randrange(10),
+                                            x1=173 + random.randrange(30), y1=720 - random.randrange(10),
+                                            duration=0.5)
+            utilities.random_sleep(0.2, 0.5)
+            click((681, 263), random_range=10, need_convert=True)
+            wait_for_color(LocatorColor.Map)
+        elif loc == LocatorColor.Map:
+            pass
+        else:
+            raise KeyError
         constants.INPUT_CONTROLLER.move(1564+random.randrange(-50, 50), 648+random.randrange(-50, 50))
         time.sleep(0.2)
         for i in range(random.randrange(50, 100)):
@@ -158,8 +173,8 @@ def search_for_exp(fight_count):
                     fight_count = fight_count + 1
                     this_fight = combat.Combat('探索BOSS', combat_time_limit=60 * 1 + random.randint(40, 80))
                     combat_result = this_fight.start(auto_ready=False)
-                    time.sleep(2)
-                    loc = wait_for_color(TansuoColor.InDungeon, max_time=3)
+                    time.sleep(3)
+                    loc = wait_for_color(TansuoColor.InDungeon, max_time=5)
                     if loc:
                         logging.info('loot found!')
                         loot_loc = myFindColor(TansuoColor.BossLoot)
@@ -208,34 +223,45 @@ def one_tansuo():
 
 
 
-def repeat_tansuo(times=999, liao_sep=8):
+def repeat_tansuo(times=999, liao_sep=8, liao_status=1):
     t = 0
     while t < times:
         tansuo_to_dungeon()
         result = one_tansuo()
         t += 1
         if not t%liao_sep:
-            enter_tupo()
-            click((1648, 505), random_range=3, need_convert=True)
-            liao_status = main_liaotupo()
-            click((1648, 333), need_convert=True)
-            personal_status = main_personaltupo()
-            click((1648,505), need_convert=True)
-            liao_status = main_liaotupo()
             escape()
-            wait_for_color(LocatorColor.Main)
-            time.sleep(1)
-            constants.INPUT_CONTROLLER.move(1570, 720)
-            constants.INPUT_CONTROLLER.drag(x0=1570+random.randrange(30),
-                                            y0=720-random.randrange(10),
-                                            x1=173+random.randrange(30), y1=720-random.randrange(10), duration=0.5)
-            utilities.random_sleep(0.2, 0.5)
-            click((681, 263), random_range=10, need_convert=True)
-            wait_for_color(LocatorColor.Map)
+            loc = map_locator()
+            if loc == LocatorColor.Main:
+                time.sleep(1)
+                constants.INPUT_CONTROLLER.move(1570, 720)
+                constants.INPUT_CONTROLLER.drag(x0=1570 + random.randrange(30),
+                                                y0=720 - random.randrange(10),
+                                                x1=173 + random.randrange(30), y1=720 - random.randrange(10),
+                                                duration=0.5)
+                utilities.random_sleep(0.2, 0.5)
+                click((681, 263), random_range=10, need_convert=True)
+                wait_for_color(LocatorColor.Map)
+            elif loc == LocatorColor.Map:
+                pass
+            else:
+                raise KeyError
+            time.sleep(2)
+            enter_tupo()
+            if liao_status:
+                click((1648, 505), random_range=3, need_convert=True)
+                liao_status = main_liaotupo()
+                click((1648, 333), need_convert=True)
+            personal_status = main_personaltupo()
+            if liao_status:
+                click((1648,505), need_convert=True)
+                liao_status = main_liaotupo()
+            escape()
 
 
 
 if __name__ == '__main__':
+    liao_status = 1
     user32 = windll.user32
     user32.SetProcessDPIAware()
     constants.init_constants(move_window=1)
@@ -245,20 +271,30 @@ if __name__ == '__main__':
         datefmt="%Y-%m-%d %H:%M:%S")
     _CAPTAINSLOT = 3
     enter_tupo()
-    click((1648, 505), random_range=3, need_convert=True)
-    liao_status = main_liaotupo()
-    click((1648, 333), need_convert=True)
+    if liao_status:
+        click((1648, 505), random_range=3, need_convert=True)
+        liao_status = main_liaotupo()
+        click((1648, 333), need_convert=True)
     personal_status = main_personaltupo()
-    click((1648, 505), need_convert=True)
-    liao_status = main_liaotupo()
+    if liao_status:
+        click((1648, 505), need_convert=True)
+        liao_status = main_liaotupo()
     escape()
-    wait_for_color(LocatorColor.Main)
-    time.sleep(1)
-    constants.INPUT_CONTROLLER.move(1570, 720)
-    constants.INPUT_CONTROLLER.drag(x0=1570 + random.randrange(30),
-                                    y0=720 - random.randrange(10),
-                                    x1=173 + random.randrange(30), y1=720 - random.randrange(10), duration=0.5)
-    utilities.random_sleep(0.2, 0.5)
-    click((681, 263), random_range=10, need_convert=True)
-    wait_for_color(LocatorColor.Map)
-    repeat_tansuo()
+    time.sleep(3)
+    loc = map_locator()
+    if loc == LocatorColor.Main:
+        time.sleep(1)
+        constants.INPUT_CONTROLLER.move(1570, 720)
+        constants.INPUT_CONTROLLER.drag(x0=1570 + random.randrange(30),
+                                        y0=720 - random.randrange(10),
+                                        x1=173 + random.randrange(30), y1=720 - random.randrange(10),
+                                        duration=0.5)
+        utilities.random_sleep(0.2, 0.5)
+        click((681, 263), random_range=10, need_convert=True)
+        wait_for_color(LocatorColor.Map)
+    elif loc == LocatorColor.Map:
+        pass
+    else:
+        raise KeyError
+    repeat_tansuo(liao_status=liao_status)
+

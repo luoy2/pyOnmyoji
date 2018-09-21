@@ -73,13 +73,17 @@ def delay_find_color(color, delay_gap):
 def accept_invite():
     invite_cords = find_color(UtilColor.AcceptInvite)
     if invite_cords:
-        click(invite_cords, 5, tired_check=True)
+        rand_x = invite_cords[0] + random.randrange(-2, 2)
+        rand_y = invite_cords[1] + random.randrange(-2, 2)
+        pyautogui.click(rand_x, rand_y)
+
 
 def if_outof_sushi():
     outsushi_result = myFindColor(UtilColor.OutofSushi)
     if outsushi_result:
         logging.warning('体力不足!')
         exit(0)
+
 
 def findimg(img, confidence=0.98, grayscale=False):
     accept_invite()
@@ -209,3 +213,25 @@ def wait_for_leaving_color(color,
                 raise Exception
         recheck+=1
     time.sleep(0.5)
+
+
+
+def map_locator():
+    max_retry_time = 3*60
+    cur_time = datetime.datetime.now()
+    while 1:
+        for i in [LocatorColor.Map, LocatorColor.Main, LocatorColor.Jiejie]:
+            _ = myFindColor(i)
+            if _:
+                logging.debug('found map color.. now confirm')
+                for retry in range(3):
+                    retry_color = myFindColor(i)
+                    if not retry_color:
+                        logging.debug('confirm failed')
+                        return map_locator()
+                return i
+        time.sleep(3)
+        logging.debug("didn't find any map color.")
+        if  (datetime.datetime.now()-cur_time).total_seconds() > max_retry_time:
+            logging.debug('map color finder timeout')
+            raise TimeoutError

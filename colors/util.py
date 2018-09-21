@@ -1,5 +1,5 @@
 from findimg.core import *
-
+import datetime
 
 def normalize_color_list(color_list):
     result_list = []
@@ -41,7 +41,7 @@ raw_accept_invite = [[(1142, 607), (97, 186, 108)],
 
 
 class UtilColor:
-    AcceptInvite = ColorToMatch((1095, 544, 1202, 655), normalize_color_list(raw_accept_invite), 1)
+    AcceptInvite = ColorToMatch([1110, 723, 1167, 782], [[(0, 0), (215, 103, 85)], [(-4, -127), (94, 184, 104)], [(18, 16), (152, 69, 55)]], 2)
     OutofSushi = ColorToMatch([768, 602, 793, 684], [[(0, 0), (243, 178, 94)], [(-23, -103), (127, 70, 183)], [(40, -153), (106, 69, 133)]], 1)
 
 
@@ -99,7 +99,7 @@ raw_enter_dungeon = [[(1205, 750), (243, 178, 94)], [(1332, 782),(243, 178, 94)]
 raw_combat_boss = [[(861, 290), (254, 251, 245)], [(834, 270), (157, 34, 35)], [(890, 254), (192, 43, 35)]]
 class TansuoColor:
     EnterDungeon = ColorToMatch((1200, 720, 1250, 780), normalize_color_list(raw_enter_dungeon), 2)
-    InDungeon = ColorToMatch((40,780,80, 820), normalize_color_list(raw_in_dugeon), 1)
+    InDungeon = ColorToMatch([21, 903, 122, 985], [[(0, 0), (66, 64, 93)], [(42, -19), (35, 54, 40)], [(14, -151), (155, 53, 92)]], 5)
     ExpIcon = ColorToMatch((97, 323, 1646, 830), [[(0, 0), (155, 33, 34)], [(6, 0), (130, 29, 29)], [(1, -15), (46, 116, 130)]], 5)
     CombatIcon = ColorToMatch((0, 0, 1727, 1018),[[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 5)
     CombatBoss = ColorToMatch([758, 188, 988, 430], [[(0, 0), (245, 233, 224)], [(-25, 4), (179, 47, 50)], [(-37, 8), (233, 167, 174)]], 5)
@@ -121,17 +121,14 @@ raw_main = [[(1674, 900), (222, 205, 200)], [(1681, 832), (207, 167, 109)], [(16
 raw_jiejie = [[(837, 122), (248, 243, 224)]]
 class LocatorColor:
     Map = ColorToMatch((164 - 5, 944 - 5, 164 + 5, 944 + 5), normalize_color_list(raw_map), 2)
-    Main = ColorToMatch((1674 - 5, 900 - 5, 1674 + 5, 900 + 5), normalize_color_list(raw_main), 2)
+    Main = ColorToMatch([1644, 861, 1705, 937], [[(0, 0), (189, 170, 169)], [(20, -66), (126, 88, 82)], [(-14, 76), (12, 25, 99)]], 5)
     Jiejie = ColorToMatch((836, 121, 838, 123), normalize_color_list(raw_jiejie), 0)
 
 
-def get_map_location():
-    color_list = [LocatorColor.Map, LocatorColor.Main, LocatorColor.Jiejie, CombatColor.InCombat, CombatColor.Damo,
-                  CombatColor.Ready, TansuoColor.InDungeon]
-    for i in color_list:
-        result = myFindColor(i)
-        if result:
-            return i
+
+
+
+
 
 
 

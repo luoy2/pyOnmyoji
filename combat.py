@@ -28,6 +28,9 @@ class Combat:
 
 
     def start(self, auto_ready=False):
+        if myFindColor(UtilColor.OutofSushi):
+            escape()
+            exit(0)
         if not auto_ready:
             ready_loc = wait_for_color(CombatColor.Ready)
             click(ready_loc, random_range=10, tired_check=False)
@@ -35,9 +38,6 @@ class Combat:
         return self.get_result()
 
     def get_result(self):
-        if myFindColor(UtilColor.OutofSushi):
-            escape()
-            exit(0)
         # wait_for_color(CombatColor.InCombat)
         win_loc = myFindColor(CombatColor.Win)
         lose_loc = myFindColor(CombatColor.Lose)

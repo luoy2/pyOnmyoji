@@ -5,10 +5,12 @@ import logging
 import constants
 import time
 from utilities import *
+import findimg
 
 
 
 def click(cords, random_range=5,tired_check=True, need_convert=False):
+    findimg.accept_invite()
     if tired_check:
         perform_tired_check()
     if need_convert:
