@@ -1,14 +1,7 @@
-import constants
-from controller import click
-from combat import Combat, CombatResult
 from findimg import *
 import pytesseract
-from colors.util import PartyColor
-import img
-import parties
-import time
 import utilities
-import multiprocessing
+
 
 class YeyuanhuoColor:
     ChooseYeyuanhuo = ColorToMatch([1140, 440, 1180, 520], [[(0, 0), (249, 243, 252)], [(-53, 50), (44, 168, 141)], [(-1, 127), (84, 67, 80)]], 1)

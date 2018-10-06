@@ -5,10 +5,10 @@ from colors.util import *
 import time
 import datetime
 import constants
-from controller import *
 import logging
 import utilities
 import numpy as np
+from controller import *
 
 
 #TODO
