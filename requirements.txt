@@ -14,7 +14,7 @@ opencv-python==3.4.2.17
 pefile==2018.8.8
 Pillow==5.2.0
 PyAutoGUI==0.9.38
-PyInstaller==3.4.dev0+bbf964c6b
+PyInstaller
 PyMsgBox==1.0.6
 pypiwin32==223
 PyScreeze==0.1.18
