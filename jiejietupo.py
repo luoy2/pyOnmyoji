@@ -142,6 +142,7 @@ class LiaoTuPo:
 
 
     def get_remain_chance(self):
+        accept_invite()
         x1, y1 = cordinates_convert((322, 849), constants.WINDOW_ATTRIBUTES)
         x2, y2 = cordinates_convert((345, 880), constants.WINDOW_ATTRIBUTES)
         img = grab_screen([x1, y1, x2, y2])
@@ -190,6 +191,7 @@ class PersonalTuPo:
         while pyautogui.pixelMatchesColor(self.waiting_color_cords[0],
                                           self.waiting_color_cords[1],
                                           self.waiting_color):
+            accept_invite()
             MINUTE_CORDS = add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_MINUTE, constants.WINDOW_ATTRIBUTES)
             SECOND_CORDS = add_pos_with_offset(JIEJIE_OCR_LOCATION.PERSONAL_WAITING_SECOND, constants.WINDOW_ATTRIBUTES)
             minute_img = Image.fromarray(grab_screen(MINUTE_CORDS))

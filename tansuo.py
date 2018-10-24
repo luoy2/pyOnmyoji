@@ -153,7 +153,7 @@ def search_for_exp(fight_count):
                              [[(0, 0), (229, 230, 248)], [(-14, 31), (237, 163, 172)], [(-23, -13), (66, 77, 132)]], 10))
             if combat_loc:
                 logging.debug('找到战斗')
-                click(combat_loc)
+                click(combat_loc, tired_check=False)
                 time.sleep(0.5)
                 if_outof_sushi()
                 combat_loc = myFindColor(TansuoColor.CombatIcon)
