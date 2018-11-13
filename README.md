@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 
 #### a few notes：
-1. all the color cords were taken on a 4k monitor(win ui zoom 150%), so if you are on a different resolution and zoom percentage, you probably need to re take all the color cords. I will upload a tutorial and a PyQt tool about taking the color cords sometime later. Basically, all the colors were in `colors/util.py` and the structure would be:
+1. all the color cords were taken on a #4k monitor(win ui zoom 150%)#, so if you are on a different resolution and zoom percentage, you probably need to re take all the color cords. I will upload a tutorial and a PyQt tool about taking the color cords sometime later. Basically, all the colors were in `colors/util.py` and the structure would be:
 
 ```
 LiaoAttack = ColorToMatch([537, 169, 1459, 963], [[(0, 0), (243, 178, 94)], [(33, -37), (150, 59, 46)], [(-331, -3), (243, 178, 94)]], 1)
