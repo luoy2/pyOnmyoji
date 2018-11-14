@@ -9,7 +9,7 @@ import logging
 import utilities
 import numpy as np
 from controller import *
-
+import random
 
 #TODO
 # 1. 找色器
