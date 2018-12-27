@@ -143,8 +143,8 @@ class LiaoTuPo:
 
     def get_remain_chance(self):
         accept_invite()
-        x1, y1 = cordinates_convert((322, 849), constants.WINDOW_ATTRIBUTES)
-        x2, y2 = cordinates_convert((345, 880), constants.WINDOW_ATTRIBUTES)
+        x1, y1 = cordinates_convert((381, 777), constants.WINDOW_ATTRIBUTES)
+        x2, y2 = cordinates_convert((400, 804), constants.WINDOW_ATTRIBUTES)
         img = grab_screen([x1, y1, x2, y2])
         img = Image.fromarray(img)
         remain = int(pytesseract.image_to_string(img, config='-psm 6').replace('O', '0'))

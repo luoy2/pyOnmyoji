@@ -65,22 +65,30 @@ def swap_full_exp_mons():
     wait_for_color(CombatColor.Ready)
     need_change_mons = detect_full_exp_mons()
     if need_change_mons:
-        click((100, 743), tired_check=True, random_range=5)
+        accept_invite()
+        utilities.random_sleep(2, 1)
+        click((100, 743), tired_check=True, random_range=1)
+        click((100, 743), tired_check=True, random_range=1)
         logging.debug('更换狗粮中。。。')
         utilities.random_sleep(2, 1)
-        click((113, 928), tired_check=False, random_range=5)
+        accept_invite()
+        click((113, 928), tired_check=False, random_range=1)
         utilities.random_sleep(0.2, 0.2)
-        click((228, 525), tired_check=False, random_range=5)
+        accept_invite()
+        click((228, 525), tired_check=False, random_range=1)
 
     utilities.random_sleep(0.5, 0.5)
     for num, change in enumerate(need_change_mons):
         this_mons_loc_x = mons_loc[num][0] + random.randrange(-10, 10)
         this_mons_loc_y = mons_loc[num][1] + random.randrange(-10, 10)
         constants.INPUT_CONTROLLER.move(x=this_mons_loc_x, y=this_mons_loc_y, duration=0.2)
+        accept_invite()
         constants.INPUT_CONTROLLER.click_down()
+        accept_invite()
         constants.INPUT_CONTROLLER.move(x=this_mons_loc_x,
                                         y=this_mons_loc_y-240-random.randrange(20),
                                         duration=0.2)
+        accept_invite()
         constants.INPUT_CONTROLLER.move(x=slot_loc[change][0]+random.randrange(-10, 10),
                                         y=slot_loc[change][1]++random.randrange(-10, 10),
                                         duration=0.2)
@@ -154,7 +162,7 @@ def search_for_exp(fight_count):
             if combat_loc:
                 logging.debug('找到战斗')
                 click(combat_loc, tired_check=False)
-                time.sleep(0.5)
+                time.sleep(1)
                 if_outof_sushi()
                 combat_loc = myFindColor(TansuoColor.CombatIcon)
                 if combat_loc:
@@ -180,8 +188,10 @@ def search_for_exp(fight_count):
                         loot_loc = myFindColor(TansuoColor.BossLoot)
                         while loot_loc:
                             logging.info('picking up loot')
+                            accept_invite()
                             click(loot_loc, tired_check=True)
                             utilities.random_sleep(0.5, 1)
+                            accept_invite()
                             click((90, 943), tired_check=True, random_range=10, need_convert=True)
                             utilities.random_sleep(1.5, 1)
                             loot_loc = myFindColor(TansuoColor.BossLoot)
@@ -203,6 +213,7 @@ def next_scene():
     constants.INPUT_CONTROLLER.drag(x0=1680, y0=787, x1=687, y1=787, duration=0.2)
 
 
+import win32com.client
 def one_tansuo():
     wait_for_color(TansuoColor.InDungeon)
     fight_count = 0
@@ -213,10 +224,21 @@ def one_tansuo():
         result = search_for_exp(fight_count)
         if result == TansuoResult.FinishedWithBoss:
             print('finished with boss')
+            # while 1:
+            #     result = find_color(ChaoGuiColor.FindChaoGui)
+            #     if result:
+            #         pyautogui.click((510, 392))
+            #         speaker = win32com.client.Dispatch("SAPI.SpVoice")
+            #         speaker.Speak(u"Found Guiwang")
+            #         pyautogui.click((510, 392))
+            #         time.sleep(99999)
+            #     time.sleep(0.1)
             return result
         wait_for_color(TansuoColor.InDungeon)
+    accept_invite()
     click((77, 124), random_range=3, need_convert=True)
     utilities.random_sleep(0.5, 1)
+    accept_invite()
     click((1030, 557), random_range=3, tired_check=False, need_convert=True)
     wait_for_color(TansuoColor.EnterDungeon)
     return TansuoResult.FinishedWithoutBoss
@@ -240,6 +262,7 @@ def repeat_tansuo(times=999, liao_sep=8, liao_status=1):
                                                 x1=173 + random.randrange(30), y1=720 - random.randrange(10),
                                                 duration=0.5)
                 utilities.random_sleep(0.2, 0.5)
+                accept_invite()
                 click((681, 263), random_range=10, need_convert=True)
                 wait_for_color(LocatorColor.Map)
             elif loc == LocatorColor.Map:
@@ -249,11 +272,14 @@ def repeat_tansuo(times=999, liao_sep=8, liao_status=1):
             time.sleep(2)
             enter_tupo()
             if liao_status:
+                accept_invite()
                 click((1648, 505), random_range=3, need_convert=True)
                 liao_status = main_liaotupo()
+                accept_invite()
                 click((1648, 333), need_convert=True)
             personal_status = main_personaltupo()
             if liao_status:
+                accept_invite()
                 click((1648,505), need_convert=True)
                 liao_status = main_liaotupo()
             escape()
@@ -262,6 +288,7 @@ def repeat_tansuo(times=999, liao_sep=8, liao_status=1):
 
 if __name__ == '__main__':
     liao_status = 1
+    # personal_status = 0
     user32 = windll.user32
     user32.SetProcessDPIAware()
     constants.init_constants(move_window=1)
@@ -272,11 +299,14 @@ if __name__ == '__main__':
     _CAPTAINSLOT = 3
     enter_tupo()
     if liao_status:
+        accept_invite()
         click((1648, 505), random_range=3, need_convert=True)
         liao_status = main_liaotupo()
+        accept_invite()
         click((1648, 333), need_convert=True)
     personal_status = main_personaltupo()
     if liao_status:
+        accept_invite()
         click((1648, 505), need_convert=True)
         liao_status = main_liaotupo()
     escape()
@@ -290,6 +320,7 @@ if __name__ == '__main__':
                                         x1=173 + random.randrange(30), y1=720 - random.randrange(10),
                                         duration=0.5)
         utilities.random_sleep(0.2, 0.5)
+        accept_invite()
         click((681, 263), random_range=10, need_convert=True)
         wait_for_color(LocatorColor.Map)
     elif loc == LocatorColor.Map:

@@ -16,18 +16,14 @@ if __name__ == '__main__':
     from ctypes import windll
     user32 = windll.user32
     user32.SetProcessDPIAware()
-    config = {'executable_path': '', 'window_name': u'阴阳师-网易游戏'}
-    onmyoji_game = Game(executable_path=config['executable_path'], window_name=config['window_name'])
-    onmyoji_game.after_launch()
-    logging.basicConfig(
-        level=0,
-        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
-        datefmt="%Y-%m-%d %H:%M:%S")
+
+    constants.init_constants(u'阴阳师-网易游戏', move_window=1)
     while 1:
      result = find_color(ChaoGuiColor.FindChaoGui)
      if result:
-         speaker = win32com.client.Dispatch("SAPI.SpVoice")
-         speaker.Speak(u"Found Guiwang！")
          pyautogui.click((510, 392))
-     time.sleep(0.5)
+         speaker = win32com.client.Dispatch("SAPI.SpVoice")
+         speaker.Speak(u"Found Guiwang")
+         pyautogui.click((510, 392))
+     time.sleep(0.1)
 

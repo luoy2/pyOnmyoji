@@ -33,14 +33,22 @@ def as_member(batter_name):
         battle.start(auto_ready=True)
         time.sleep(2)
 
-def as_leader(batter_name):
+def as_leader(batter_name, chaoguiwang=False):
     while 1:
-        battle = Combat(batter_name)
+        if chaoguiwang:
+            battle = Combat(batter_name, combat_time_limit=99999)
+        else:
+            battle = Combat(batter_name)
         battle.start(auto_ready=True)
-        time.sleep(2)
-        start_loc = wait_for_color(PartyColor.StartFight)
+        if chaoguiwang:
+            time.sleep(5)
+        else:
+            time.sleep(2)
+        logging.debug("waiting for start combat")
+        start_loc = wait_for_color(PartyColor.StartFight, max_time=99999)
         utilities.random_sleep(0.5, 2)
         click(start_loc, random_range=3, tired_check=True)
+
 
 if __name__ == '__main__':
     import constants
@@ -55,11 +63,12 @@ if __name__ == '__main__':
         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
         datefmt="%Y-%m-%d %H:%M:%S")
     #
-    constants.init_constants(u'阴阳师-网易游戏', move_window=False)
     # constants.init_constants(u'阴阳师-网易游戏', move_window=False)
-    as_leader('御魂')
+    # constants.init_constants(u'阴阳师-网易游戏', move_window=False)
+    # as_leader('御魂')
 
-    # constants.init_constants(u'[#] 阴阳师-网易游戏 [#]', move_window=True)
+    constants.init_constants(u'[#] 阴阳师-网易游戏 [#]', move_window=False)
+    as_leader('御魂', chaoguiwang=False)
     # as_member('御魂')
 
 

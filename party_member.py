@@ -54,11 +54,11 @@ if __name__ == '__main__':
         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
         datefmt="%Y-%m-%d %H:%M:%S")
 
-    constants.init_constants(u'[#] 阴阳师-网易游戏 [#]', move_window=False)
-    as_member('御魂')
-
-    # constants.init_constants(u'阴阳师-网易游戏', move_window=True)
+    # constants.init_constants(u'[#] 阴阳师-网易游戏 [#]', move_window=False)
     # as_member('御魂')
+
+    constants.init_constants(u'阴阳师-网易游戏', move_window=True)
+    as_member('御魂')
 
 
 # if __name__ == '__main__':
