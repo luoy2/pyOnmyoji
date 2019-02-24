@@ -36,7 +36,7 @@ class MainJiejie:
         while not myFindColor(LocatorColor.Jiejie):
             # print(pyautogui.pixel(self.x, self.y))
             utilities.random_sleep(0.1, 0.2)
-            click((491, 113), random_range=20, tired_check=False, need_convert=True)
+            click((158, 344), random_range=20, tired_check=False, need_convert=True)
             count += 1
             if count > self.retry_time:
                 logging.info(f'failed to enter jiejie for {self.retry_time}.')
@@ -339,7 +339,7 @@ def main_liaotupo():
                 utilities.random_sleep(1, 0.5)
                 accept_invite()
                 click((986, 629), tired_check=False, need_convert=True)
-                combat_result = this_fight.start(auto_ready=True)
+                # combat_result = this_fight.start(auto_ready=True)
             tupo_main.tap_to_main()
             liao_tupo.current_page = 0
             logging.debug('finished one tupo')
@@ -389,7 +389,7 @@ def main_personaltupo(refresh_time=3, desc=True):
                 utilities.random_sleep(1, 0.5)
                 accept_invite()
                 click((986, 629), tired_check=False, need_convert=True)
-                combat_result = this_fight.start(auto_ready=True)
+                # combat_result = this_fight.start(auto_ready=True)
             logging.debug('finished one tupo')
             tupo_main.tap_to_main()
             remain = personal_tupo.get_remain_chance()

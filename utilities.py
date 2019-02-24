@@ -49,4 +49,3 @@ def cordinates_scale(cords, _current_scale):
     new_y = int((cords[1]) / _original_scale['height'] * _current_scale['height'])
     return (new_x, new_y)
 
-
