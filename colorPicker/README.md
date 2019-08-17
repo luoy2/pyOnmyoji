@@ -35,7 +35,7 @@ LiaoAttack = ColorToMatch(
 
 `region`参数指定了要找颜色的坐标范围。使用鼠标指针和快捷键`s`确定`region`的左上角坐标，使用鼠标指针和快捷键`a`确定右下角坐标；
 
-`color_list`参数是含有三个list的list。`color_list[0]`是“原点颜色”，`color_list[1]`和`color_list[2]`是两个“参考颜色”。参考颜色之坐标是相对于原点颜色之坐标的偏移量(offset)。换句话说，原点颜色的RGB值应该是`region`所圈定的图像区域中最为独特的。原点颜色通过鼠标指针快捷键`1`选定，两个参考颜色由鼠标指针和快捷键`2`、`3`选定；
+`color_list`参数是含有三个list的list。`color_list[0]`是“原点颜色”，`color_list[1]`和`color_list[2]`是两个“参考颜色”。参考颜色之坐标是相对于原点颜色之坐标的偏移量(offset)。换句话说，原点颜色的RGB值应该是`region`所圈定的图像区域中最为独特的。原点颜色通过鼠标指针和快捷键`1`选定，两个参考颜色由鼠标指针和快捷键`2`、`3`选定；
 
 `tolerance`参数指的是进行找色判决时，对此颜色可容许多大的偏差（见findimg/core.py中`_match_color`）。
 
