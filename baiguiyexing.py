@@ -4,7 +4,7 @@
 
 使用ORB算子提取特征匹配已有图像，判断当前状态，然后做出相应动作。
 
-目前还不能邀请好友，不能选定特定的式神，不能调整单次扫豆子个数
+目前还不能邀请好友，不能选定特定的式神，不能调整单次撒豆子个数
 '''
 import constants
 import logging
@@ -28,6 +28,7 @@ class BaiguiyexingStateDecision:
         "st_getting_bonus"
     ]
     def __init__(self):
+        self.logger = logging.getLogger('BaiguiyexingStateDecision')
         img_st_getting_ready = cv2.imread("res/mamemaki/st_getting_ready.jpg")
         img_st_choosing_boss = cv2.imread("res/mamemaki/st_choosing_boss.jpg")
         # img_st_doing_mamemaki = cv2.imread("res/mamemaki/st_doing_mamemaki.jpg")
@@ -48,7 +49,7 @@ class BaiguiyexingStateDecision:
             # "st_doing_mamemaki": orb_st_doing_mamemaki,
             "st_getting_bonus": orb_st_getting_bonus
         }
-        self.descriptors= {
+        self.descriptors = {
             "st_getting_ready": orb_st_getting_ready.detectAndCompute(img_st_getting_ready, mask=None)[1],
             "st_choosing_boss": orb_st_choosing_boss.detectAndCompute(img_st_choosing_boss, mask=None)[1],
             # "st_doing_mamemaki": orb_st_doing_mamemaki.detectAndCompute(img_st_doing_mamemaki, mask=None)[1],
@@ -70,15 +71,19 @@ class BaiguiyexingStateDecision:
         for st in BaiguiyexingStateDecision.states:
             _kp, in_img_des = self.feature_extractors[st].detectAndCompute(in_img, mask=None)
             bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False)
-            if len(in_img_des) == 0:
+            if in_img_des is None or len(in_img_des) == 0:
                 continue
             matches = bf.knnMatch(self.descriptors[st], in_img_des, k=2)
             good_count = 0
-            for m,n in matches:
-                if m.distance < 0.50 * n.distance:
-                    good_count += 1
-            if good_count > self.good_count_thresholds[st]:
-                return st
+            try:  # sometimes get ValueError: not enough values to unpack (expected 2, got 1)
+                for m,n in matches:
+                    if m.distance < 0.50 * n.distance:
+                        good_count += 1
+                if good_count > self.good_count_thresholds[st]:
+                    return st
+            except:
+                self.logger.warning(f"Got an exeception in self.decide, skipping")
+            
         return "st_unknown"
 
 
@@ -162,15 +167,15 @@ class Baiguiyexing:
 
     def do_mamemaki(self):
         self.logger.info("Entered pseudo-state st_doing_mamemaki")
-        time.sleep(3)
+        random_sleep(5)  # 等待先头部队出场
 
         # 背景剪除
         # there are quite many background removing functions provided by OpenCV
         # try some fast ones?
         bg_substractor = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
 
-        while self.get_state() != "st_getting_bonus":
-            # 只要没到结算画面就认为砸豆子还在继续
+        while self.get_state() not in BaiguiyexingStateDecision.states:
+            # 只要没到其他状态就认为砸豆子还在继续
             img_grabbed = grab_screen(region=self.win_region, use_channel_rgb=False)
             fg_mask = bg_substractor.apply(img_grabbed)
 
