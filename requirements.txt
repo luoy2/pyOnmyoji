@@ -9,8 +9,8 @@ editdistance==0.4
 future==0.16.0
 macholib==1.10
 networkx==2.1
-numpy==1.15.0
-opencv-python==3.4.2.17
+numpy>=1.17.0
+opencv-python>=4.1.0.25
 pefile==2018.8.8
 Pillow==5.2.0
 PyAutoGUI==0.9.38
