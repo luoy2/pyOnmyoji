@@ -1,3 +1,5 @@
+# Thie repo is no longer unmainteined.
+
 # pyOnmyoji
 python play onmyoji(网易-阴阳师), folked win32 controller from SerpentAI
 
