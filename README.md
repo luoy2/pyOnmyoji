@@ -11,6 +11,8 @@ While working on the model constructing, I will try to move some features from m
 
 | python version        | availability |
 | ------------- |:-------------:|
+
+|python 3.7| untested |
 |python 3.6| available |
 |< python 3.5 | untested     |
 |python 2.x| unavailable |
