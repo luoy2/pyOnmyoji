@@ -14,6 +14,7 @@ import numpy as np
 import cv2
 from grabscreen import grab_screen
 from controller import click
+from findimg import accept_invite
 from utilities import random_sleep
 # from transitions import Machine
 
@@ -227,6 +228,8 @@ class Baiguiyexing:
             #     pass
             elif state == "st_getting_bonus":
                 self.get_bonus()
+            elif state == "st_unknown":
+                accept_invite()
             else:
                 self.logger.warning(f"Unknown state: {state}")
             time.sleep(2)
