@@ -1,18 +1,5 @@
-# pyOnmyoji fork
-本仓库是[luo2/pyOnmyoji](https://github.com/luoy2/pyOnmyoji.git)的fork（从commit 940f426f11bde07d4823636e17a8b46272fbc81c开始）。
+# Thie repo is no longer unmainteined.
 
-目前新增的代码暂时只有自动百鬼夜行(`baiguiyexing.py`)。这也是我在业余时间的一点“消遣”。
-
-原仓库判断当前游戏状态的主要手段是找色彩，辅助手段是利用模板匹配法找特征图像。模板匹配有个很大的问题就是图像发生微小的改变就有可能匹配不到，其次是速度太慢。我在`baiguiyexing.py`中尝试的做法是求取特征图像的features，然后利用features去匹配输入图像的features。绕开直接模板匹配。
-
-TODO LIST（立刻发出咕咕咕的声音）
-* 写更详细的文档（包括程序注释和各种README.md）；
-* 以特征匹配方式替换原仓库中使用找色彩方式判断游戏状态的代码。
-
-
-原仓库的README如下
-
-----------------------------------------
 # pyOnmyoji
 python play onmyoji(网易-阴阳师), folked win32 controller from SerpentAI
 
