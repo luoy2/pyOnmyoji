@@ -5,7 +5,17 @@ import threading
 import logging
 __LOCK = threading.Lock()
 
-def grab_screen(region=None):
+def grab_screen(region=None, use_channel_rgb=True):
+    '''
+    region: a array-like of (x1, y1, x2, y2).
+            x1 and y1 is the left-top coordinates, x2 and y2 is the right-bottom coordinates
+    use_rgb_channel: Specifies whether convert the output image to RGB format
+            if True (default): returns RGB image
+            if False: returns BGR image
+
+    returns
+    an image of a numpy array
+    '''
     __LOCK.acquire()
     try:
         hwin = win32gui.GetDesktopWindow()
@@ -36,7 +46,12 @@ def grab_screen(region=None):
         memdc.DeleteDC()
         win32gui.ReleaseDC(hwin, hwindc)
         win32gui.DeleteObject(bmp.GetHandle())
-        return cv2.cvtColor(img, cv2.COLOR_BGRA2RGB)
+
+        if use_channel_rgb:
+            img = cv2.cvtColor(img, cv2.COLOR_BGRA2RGB)
+        else:
+            img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+        return img
     except Exception as e:
         logging.exception(e)
     finally:
