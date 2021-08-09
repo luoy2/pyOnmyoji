@@ -21,7 +21,7 @@ PyScreeze==0.1.18
 pytesseract==0.2.4
 PyTweening==1.0.3
 PyWavelets==0.5.2
-pywin32==223
+pywin32==301
 pywin32-ctypes==0.2.0
 scikit-image==0.14.0
 scipy==1.1.0
