@@ -3,7 +3,7 @@ certifi==2018.4.16
 cloudpickle==0.5.3
 comtypes==1.1.6
 Cython==0.28.5
-dask==0.18.2
+dask==2021.10.0
 decorator==4.3.0
 editdistance==0.4
 future==0.16.0
