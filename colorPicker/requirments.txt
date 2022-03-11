@@ -1,6 +1,6 @@
 keyboard==0.13.2
 mouse==0.7.0
-Pillow==8.2.0
+Pillow==9.0.1
 PyAutoGUI==0.9.38
 PyMsgBox==1.0.6
 PyQt5==5.11.2
