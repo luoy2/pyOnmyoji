@@ -1,5 +1,5 @@
 altgraph==0.16.1
-certifi==2018.4.16
+certifi==2022.12.7
 cloudpickle==0.5.3
 comtypes==1.1.6
 Cython==0.28.5
